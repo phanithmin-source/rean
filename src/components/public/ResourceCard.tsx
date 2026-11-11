@@ -41,13 +41,13 @@ export function ResourceCard({ resource }: ResourceCardProps) {
   const getDifficultyBadge = (difficulty: string) => {
     switch (difficulty) {
       case "beginner":
-        return { label: "Beginner", className: "bg-emerald-50 text-emerald-800 border-emerald-300" };
+        return { label: "Beginner", className: "bg-emerald-50 text-emerald-800 border-emerald-200/80" };
       case "intermediate":
-        return { label: "Intermediate", className: "bg-sky-50 text-sky-800 border-sky-300" };
+        return { label: "Intermediate", className: "bg-sky-50 text-sky-800 border-sky-200/80" };
       case "advanced":
-        return { label: "Advanced", className: "bg-amber-50 text-amber-800 border-amber-300" };
+        return { label: "Advanced", className: "bg-amber-50 text-amber-800 border-amber-200/80" };
       default:
-        return { label: difficulty, className: "bg-gray-50 text-gray-800 border-gray-300" };
+        return { label: difficulty, className: "bg-gray-50 text-gray-800 border-gray-200/80" };
     }
   };
 
@@ -56,22 +56,22 @@ export function ResourceCard({ resource }: ResourceCardProps) {
   const IconComponent = typeMeta.icon;
 
   return (
-    <div className="group relative flex flex-col justify-between rounded-xl border border-border bg-card p-6 shadow-sm hover:shadow-md hover:border-navy/40 transition-all">
+    <div className="group relative flex flex-col justify-between rounded-2xl border border-border/80 bg-card p-6 shadow-xs hover:shadow-md hover:border-sage-400/80 hover:-translate-y-0.5 transition-all duration-200">
       <div>
         {/* Top Badges */}
-        <div className="flex items-center justify-between gap-2 mb-3">
-          <Badge variant={typeMeta.variant} className="flex items-center gap-1.5 py-0.5 px-2">
+        <div className="flex items-center justify-between gap-2 mb-3.5">
+          <Badge variant={typeMeta.variant} className="flex items-center gap-1.5 py-0.5 px-2.5 rounded-full text-xs font-semibold">
             <IconComponent className="w-3.5 h-3.5" />
             <span>{typeMeta.label}</span>
           </Badge>
 
-          <span className={`text-[11px] font-semibold px-2 py-0.5 rounded border ${diffMeta.className}`}>
+          <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${diffMeta.className}`}>
             {diffMeta.label}
           </span>
         </div>
 
         {/* Title */}
-        <h3 className="text-lg font-bold text-navy group-hover:text-navy-900 transition-colors line-clamp-1">
+        <h3 className="text-lg font-extrabold text-navy group-hover:text-navy-900 transition-colors line-clamp-1 tracking-tight">
           <Link href={`/resources/${resource.slug}`} className="focus:outline-none">
             <span className="absolute inset-0" aria-hidden="true" />
             {resource.title}
@@ -92,7 +92,7 @@ export function ResourceCard({ resource }: ResourceCardProps) {
 
         {/* Curation note if present */}
         {resource.curation_note && (
-          <div className="mt-3 text-xs bg-cream-100 border-l-2 border-sage p-2 rounded-r text-navy/80 italic line-clamp-2">
+          <div className="mt-3.5 text-xs bg-sage-50/60 border border-sage-200/60 p-2.5 rounded-xl text-navy/80 italic line-clamp-2">
             &ldquo;{resource.curation_note}&rdquo;
           </div>
         )}
@@ -105,7 +105,7 @@ export function ResourceCard({ resource }: ResourceCardProps) {
             resource.tags.slice(0, 3).map((tag) => (
               <span
                 key={tag}
-                className="text-[11px] font-mono px-2 py-0.5 bg-cream-200 text-navy/70 rounded"
+                className="text-[10px] font-mono px-2 py-0.5 bg-cream-100 text-navy/70 border border-border/60 rounded-md"
               >
                 #{tag}
               </span>
@@ -121,7 +121,7 @@ export function ResourceCard({ resource }: ResourceCardProps) {
           )}
 
           {resource.download_asset_id && (
-            <span className="inline-flex items-center gap-1 text-navy/80 font-medium bg-cream-200 px-2 py-0.5 rounded">
+            <span className="inline-flex items-center gap-1 text-navy/80 font-medium bg-cream-100 border border-border/60 px-2 py-0.5 rounded-md">
               <Download className="w-3 h-3 text-navy" />
               <span>Files</span>
             </span>

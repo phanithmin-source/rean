@@ -64,7 +64,7 @@ export default async function AdminDashboardPage() {
       {/* Metrics Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {/* Resources Stat */}
-        <div className="p-5 rounded-xl border border-border bg-card shadow-xs space-y-2">
+        <div className="p-6 rounded-2xl border border-border/80 bg-card shadow-xs space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
               Resources
@@ -72,19 +72,19 @@ export default async function AdminDashboardPage() {
             <Bookmark className="w-4 h-4 text-navy/60" />
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-extrabold text-navy">
+            <span className="text-3xl font-extrabold text-navy tnum">
               {stats.counts.publishedResources}
             </span>
             <span className="text-xs text-emerald-700 font-semibold">Published</span>
           </div>
           <div className="text-xs text-muted-foreground pt-1 border-t border-border/60 flex items-center justify-between">
             <span>Drafts / In-progress:</span>
-            <span className="font-bold text-amber-700">{stats.counts.draftResources}</span>
+            <span className="font-bold text-amber-700 tnum">{stats.counts.draftResources}</span>
           </div>
         </div>
 
         {/* Chapters Stat */}
-        <div className="p-5 rounded-xl border border-border bg-card shadow-xs space-y-2">
+        <div className="p-6 rounded-2xl border border-border/80 bg-card shadow-xs space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
               Book Chapters
@@ -92,19 +92,19 @@ export default async function AdminDashboardPage() {
             <BookOpen className="w-4 h-4 text-navy/60" />
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-extrabold text-navy">
+            <span className="text-3xl font-extrabold text-navy tnum">
               {stats.counts.publishedChapters}
             </span>
             <span className="text-xs text-emerald-700 font-semibold">Published</span>
           </div>
           <div className="text-xs text-muted-foreground pt-1 border-t border-border/60 flex items-center justify-between">
             <span>Draft chapters:</span>
-            <span className="font-bold text-amber-700">{stats.counts.draftChapters}</span>
+            <span className="font-bold text-amber-700 tnum">{stats.counts.draftChapters}</span>
           </div>
         </div>
 
         {/* Learning Paths Stat */}
-        <div className="p-5 rounded-xl border border-border bg-card shadow-xs space-y-2">
+        <div className="p-6 rounded-2xl border border-border/80 bg-card shadow-xs space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
               Learning Paths
@@ -112,19 +112,19 @@ export default async function AdminDashboardPage() {
             <Compass className="w-4 h-4 text-navy/60" />
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-extrabold text-navy">
+            <span className="text-3xl font-extrabold text-navy tnum">
               {stats.counts.publishedPaths}
             </span>
             <span className="text-xs text-emerald-700 font-semibold">Live Paths</span>
           </div>
           <div className="text-xs text-muted-foreground pt-1 border-t border-border/60 flex items-center justify-between">
             <span>Draft roadmaps:</span>
-            <span className="font-bold text-amber-700">{stats.counts.draftPaths}</span>
+            <span className="font-bold text-amber-700 tnum">{stats.counts.draftPaths}</span>
           </div>
         </div>
 
         {/* Topics & Media */}
-        <div className="p-5 rounded-xl border border-border bg-card shadow-xs space-y-2">
+        <div className="p-6 rounded-2xl border border-border/80 bg-card shadow-xs space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
               Taxonomy & Media
@@ -133,13 +133,13 @@ export default async function AdminDashboardPage() {
           </div>
           <div className="flex items-baseline gap-3">
             <div>
-              <span className="text-2xl font-extrabold text-navy">
+              <span className="text-2xl font-extrabold text-navy tnum">
                 {stats.counts.topicsCount}
               </span>
               <span className="text-xs text-muted-foreground ml-1">Topics</span>
             </div>
             <div>
-              <span className="text-2xl font-extrabold text-navy">
+              <span className="text-2xl font-extrabold text-navy tnum">
                 {stats.counts.assetsCount}
               </span>
               <span className="text-xs text-muted-foreground ml-1">Assets</span>

@@ -69,15 +69,15 @@ export default async function AboutPage({ searchParams }: AboutPageProps) {
 
       <main className="flex-1">
         {/* Hero Banner */}
-        <section className="border-b border-border bg-[#ECE8DC]/50 py-16 md:py-24">
+        <section className="border-b border-border/70 bg-gradient-to-b from-[#F2EFE6]/50 via-[#F8F7F2] to-[#F8F7F2] py-16 md:py-24">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cream-200 border border-border text-xs font-semibold text-navy mx-auto">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-card border border-border/80 text-xs font-semibold text-navy mx-auto shadow-xs">
               <span className="font-khmer text-sage-700">អំពី រៀន</span>
-              <span>•</span>
+              <span className="text-border">•</span>
               <span>Our Purpose & Pedagogy</span>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-navy tracking-tight">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-navy tracking-tight leading-tight">
               {aboutData?.pageTitle || "About Rean (រៀន)"}
             </h1>
 

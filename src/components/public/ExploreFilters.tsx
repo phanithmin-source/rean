@@ -111,20 +111,20 @@ export function ExploreFilters({ topics, totalResults }: ExploreFiltersProps) {
   ];
 
   return (
-    <div id="catalog" className="space-y-6 pt-4">
+    <div id="catalog" className="space-y-6 pt-2">
       {/* Prominent Search Bar (DevPages / ReanCode101 reference) */}
       <form onSubmit={handleSearchSubmit} className="relative w-full">
         <div className="relative flex items-center">
-          <Search className="absolute left-4 w-5 h-5 text-navy/50 pointer-events-none" />
+          <Search className="absolute left-4 w-5 h-5 text-navy/40 pointer-events-none" />
           <input
             type="search"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Search software catalog (e.g. 'REST API', 'Java', 'SQL', 'Git', 'Docker')..."
-            className="w-full h-14 pl-12 pr-28 rounded-xl border-2 border-border bg-card text-navy text-base placeholder:text-muted-foreground focus:outline-none focus:border-navy focus:ring-4 focus:ring-cyan/30 shadow-xs transition-all"
+            className="w-full h-14 pl-12 pr-28 rounded-2xl border border-border/80 bg-card text-navy text-base placeholder:text-muted-foreground/75 focus:outline-none focus:border-sage-500 focus:ring-4 focus:ring-sage-100/60 shadow-xs transition-all"
             aria-label="Search software catalog"
           />
-          <div className="absolute right-3 flex items-center gap-1.5">
+          <div className="absolute right-2.5 flex items-center gap-1.5">
             {searchInput && (
               <button
                 type="button"
@@ -132,7 +132,7 @@ export function ExploreFilters({ topics, totalResults }: ExploreFiltersProps) {
                   setSearchInput("");
                   updateFilters({ q: "" });
                 }}
-                className="p-1.5 text-navy/50 hover:text-navy rounded-md"
+                className="p-1.5 text-navy/50 hover:text-navy rounded-lg transition-colors"
                 aria-label="Clear search text"
               >
                 <X className="w-4 h-4" />
@@ -142,7 +142,7 @@ export function ExploreFilters({ topics, totalResults }: ExploreFiltersProps) {
               type="submit"
               size="sm"
               variant="default"
-              className="h-9 px-4 font-semibold"
+              className="h-9 px-4 font-semibold rounded-xl bg-navy hover:bg-navy-700 shadow-xs"
             >
               Search
             </Button>
@@ -170,10 +170,10 @@ export function ExploreFilters({ topics, totalResults }: ExploreFiltersProps) {
         <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
           <button
             onClick={() => updateFilters({ topic: "all" })}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all border ${
+            className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all border ${
               currentTopic === "all"
                 ? "bg-navy text-white border-navy shadow-xs"
-                : "bg-card text-navy border-border hover:bg-cream-200"
+                : "bg-card text-navy/80 border-border/80 hover:bg-cream-100 hover:text-navy"
             }`}
           >
             All Topics
@@ -182,15 +182,15 @@ export function ExploreFilters({ topics, totalResults }: ExploreFiltersProps) {
             <button
               key={t.slug}
               onClick={() => updateFilters({ topic: t.slug })}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all border ${
+              className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all border ${
                 currentTopic === t.slug
                   ? "bg-navy text-white border-navy shadow-xs"
-                  : "bg-card text-navy border-border hover:bg-cream-200"
+                  : "bg-card text-navy/80 border-border/80 hover:bg-cream-100 hover:text-navy"
               }`}
             >
               {t.name}
               {t.resource_count !== undefined && (
-                <span className="ml-1.5 opacity-60 text-[10px]">
+                <span className="ml-1.5 opacity-60 text-[10px] tnum">
                   ({t.resource_count})
                 </span>
               )}
@@ -200,7 +200,7 @@ export function ExploreFilters({ topics, totalResults }: ExploreFiltersProps) {
       </div>
 
       {/* Secondary Filters Bar: Type and Difficulty */}
-      <div className="flex flex-wrap items-center justify-between gap-4 py-3 px-4 rounded-xl border border-border bg-card/70">
+      <div className="flex flex-wrap items-center justify-between gap-4 py-3 px-4 sm:px-5 rounded-2xl border border-border/80 bg-card/60">
         <div className="flex flex-wrap items-center gap-4">
           {/* Type Filter */}
           <div className="flex items-center gap-2">
@@ -208,7 +208,7 @@ export function ExploreFilters({ topics, totalResults }: ExploreFiltersProps) {
             <select
               value={currentType}
               onChange={(e) => updateFilters({ type: e.target.value })}
-              className="text-xs font-semibold bg-background border border-border rounded-md px-2.5 py-1 text-navy focus:outline-none focus:ring-1 focus:ring-navy cursor-pointer"
+              className="text-xs font-semibold bg-background border border-border/80 rounded-lg px-2.5 py-1.5 text-navy focus:outline-none focus:ring-2 focus:ring-sage-200 cursor-pointer"
               aria-label="Filter by resource type"
             >
               {resourceTypes.map((rt) => (
@@ -225,7 +225,7 @@ export function ExploreFilters({ topics, totalResults }: ExploreFiltersProps) {
             <select
               value={currentDifficulty}
               onChange={(e) => updateFilters({ difficulty: e.target.value })}
-              className="text-xs font-semibold bg-background border border-border rounded-md px-2.5 py-1 text-navy focus:outline-none focus:ring-1 focus:ring-navy cursor-pointer"
+              className="text-xs font-semibold bg-background border border-border/80 rounded-lg px-2.5 py-1.5 text-navy focus:outline-none focus:ring-2 focus:ring-sage-200 cursor-pointer"
               aria-label="Filter by difficulty level"
             >
               {difficulties.map((df) => (
@@ -243,7 +243,7 @@ export function ExploreFilters({ topics, totalResults }: ExploreFiltersProps) {
             <span className="text-navy/50 animate-pulse">Updating...</span>
           ) : (
             <span>
-              Showing <strong className="text-navy">{totalResults}</strong>{" "}
+              Showing <strong className="text-navy tnum">{totalResults}</strong>{" "}
               {totalResults === 1 ? "resource" : "resources"}
             </span>
           )}

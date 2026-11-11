@@ -4,35 +4,35 @@
 
 @layer base {
   :root {
-    --background: #F7F5EE;
-    --foreground: #343D4F;
+    --background: #F8F7F2;
+    --foreground: #2E384D;
 
     --card: #FFFFFF;
-    --card-foreground: #343D4F;
+    --card-foreground: #2E384D;
 
     --popover: #FFFFFF;
-    --popover-foreground: #343D4F;
+    --popover-foreground: #2E384D;
 
     --primary: #343D4F;
-    --primary-foreground: #F7F5EE;
+    --primary-foreground: #F8F7F2;
 
-    --secondary: #EFECE0;
-    --secondary-foreground: #343D4F;
+    --secondary: #EFECE3;
+    --secondary-foreground: #2E384D;
 
     --muted: #EDE9DC;
-    --muted-foreground: #606C80;
+    --muted-foreground: #5F6B7E;
 
     --accent: #BCE5E8;
     --accent-foreground: #1A3C42;
 
-    --destructive: #B33939;
+    --destructive: #C0392B;
     --destructive-foreground: #FFFFFF;
 
-    --border: #DFD8C7;
-    --input: #DFD8C7;
+    --border: #E4DFD2;
+    --input: #E4DFD2;
     --ring: #343D4F;
 
-    --radius: 0.5rem;
+    --radius: 0.625rem;
   }
 
   * {
@@ -42,85 +42,124 @@
   body {
     background-color: var(--background);
     color: var(--foreground);
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11", "rlig" 1, "calt" 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
+
+  /* Browser Surfaces - Theming selection, caret, scrollbars */
+  ::selection {
+    background-color: #C8ECEE;
+    color: #1A3C42;
+  }
+
+  input, textarea, select {
+    caret-color: #343D4F;
+  }
+
+  /* Custom Smooth Scrollbar */
+  ::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #D8D2C2;
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #A8C8B2;
+  }
+}
+
+/* Tabular Numerals for stats & counters */
+.tnum {
+  font-feature-settings: "tnum" 1;
+  font-variant-numeric: tabular-nums;
 }
 
 /* Custom styling for reading surfaces and markdown blocks */
 .prose-reading {
-  color: #343D4F;
-  line-height: 1.75;
+  color: #2E384D;
+  line-height: 1.8;
+  max-width: 70ch;
 }
 
 .prose-reading h1 {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-top: 1.5rem;
+  font-size: 2.125rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  margin-top: 2rem;
   margin-bottom: 1rem;
-  color: #222733;
+  color: #1E2533;
 }
 
 .prose-reading h2 {
   font-size: 1.5rem;
-  font-weight: 600;
-  margin-top: 2rem;
-  margin-bottom: 0.75rem;
-  color: #2B3241;
-  border-bottom: 1px solid #E4DEC8;
-  padding-bottom: 0.4rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: 2.25rem;
+  margin-bottom: 0.85rem;
+  color: #242D3D;
+  border-bottom: 1px solid #E4DFD2;
+  padding-bottom: 0.5rem;
 }
 
 .prose-reading h3 {
   font-size: 1.25rem;
   font-weight: 600;
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
-  color: #343D4F;
+  letter-spacing: -0.015em;
+  margin-top: 1.75rem;
+  margin-bottom: 0.6rem;
+  color: #2E384D;
 }
 
 .prose-reading p {
-  margin-top: 0.85rem;
-  margin-bottom: 0.85rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  color: #374258;
 }
 
 .prose-reading pre {
-  background-color: #222733;
-  color: #E3E7ED;
-  padding: 1rem 1.25rem;
-  border-radius: 0.5rem;
+  background-color: #1E2533;
+  color: #E6EBF2;
+  padding: 1.15rem 1.35rem;
+  border-radius: 0.75rem;
   overflow-x: auto;
-  font-size: 0.9rem;
-  margin: 1.25rem 0;
+  font-size: 0.875rem;
+  margin: 1.5rem 0;
   border: 1px solid #343D4F;
+  box-shadow: 0 4px 12px -2px rgba(26, 30, 39, 0.25);
+  line-height: 1.6;
 }
 
 .prose-reading code:not(pre code) {
-  background-color: #EFECE0;
-  color: #2B3241;
-  padding: 0.15rem 0.35rem;
-  border-radius: 0.25rem;
+  background-color: #EFECE3;
+  color: #242D3D;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.35rem;
   font-size: 0.875em;
   font-family: var(--font-ibm-plex-mono), var(--font-geist-mono), monospace;
-  border: 1px solid #DFD8C7;
+  border: 1px solid #DFD9CB;
 }
 
 .prose-reading blockquote {
-  border-left: 4px solid #A8C8B2;
-  padding-left: 1rem;
+  border-left: 1px solid #84AF91;
+  padding: 0.85rem 1.15rem;
   font-style: italic;
   color: #4D5B73;
-  margin: 1.25rem 0;
-  background-color: rgba(168, 200, 178, 0.1);
-  padding: 0.75rem 1rem;
-  border-radius: 0 0.375rem 0.375rem 0;
+  margin: 1.5rem 0;
+  background-color: rgba(168, 200, 178, 0.08);
+  border-radius: 0 0.5rem 0.5rem 0;
 }
 
 .prose-reading ul, .prose-reading ol {
   margin-left: 1.5rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
 }
 
 .prose-reading ul {
@@ -132,16 +171,17 @@
 }
 
 .prose-reading li {
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.4rem;
+  color: #374258;
 }
 
 .prose-reading a {
-  color: #2B3241;
+  color: #242D3D;
   text-decoration: underline;
   text-decoration-color: #A8C8B2;
   text-underline-offset: 3px;
   font-weight: 500;
-  transition: color 0.15s ease;
+  transition: all 0.15s ease;
 }
 
 .prose-reading a:hover {
@@ -152,18 +192,20 @@
 .prose-reading table {
   width: 100%;
   border-collapse: collapse;
-  margin: 1.5rem 0;
+  margin: 1.75rem 0;
+  font-size: 0.9rem;
 }
 
 .prose-reading th, .prose-reading td {
-  border: 1px solid #DFD8C7;
-  padding: 0.6rem 0.85rem;
+  border: 1px solid #E4DFD2;
+  padding: 0.7rem 0.9rem;
   text-align: left;
 }
 
 .prose-reading th {
-  background-color: #EFECE0;
+  background-color: #EFECE3;
   font-weight: 600;
+  color: #242D3D;
 }
 
 /* Syntax highlighting customizations */
@@ -177,14 +219,15 @@
 }
 
 .hljs-title, .hljs-section, .hljs-name {
-  color: #FFD166;
+  color: #F8D57E;
 }
 
 .hljs-comment, .hljs-quote {
-  color: #7A899E;
+  color: #7E8D9F;
   font-style: italic;
 }
 
 .hljs-number, .hljs-literal {
-  color: #F4A261;
+  color: #F5A97F;
 }
+

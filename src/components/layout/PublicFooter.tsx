@@ -21,18 +21,17 @@ export function PublicFooter({ navItems, settings }: PublicFooterProps) {
         ];
 
   return (
-    <footer className="w-full border-t border-border bg-[#ECE8DC]/60 mt-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+    <footer className="w-full border-t border-border/70 bg-[#F3EFE6]/70 mt-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12">
           {/* Brand Col */}
           <div className="md:col-span-2 space-y-4">
             <ReanLogo size="md" />
-            <p className="text-sm text-navy/70 max-w-md leading-relaxed">
-              Rean (រៀន) is a dedicated software development learning and resource hub.
-              Engineered to help students, self-taught developers, and early-career engineers
-              learn systematically through curated reading, guided pathways, and hands-on practice projects.
+            <p className="text-sm text-navy/75 max-w-md leading-relaxed">
+              Rean (រៀន) is a dedicated software development learning and resource platform.
+              Curated for students and early-career developers to discover top resources, follow structured learning paths, and master practical coding skills.
             </p>
-            <div className="pt-2 flex items-center gap-2 text-xs font-medium text-navy/60">
+            <div className="pt-2 flex items-center gap-2 text-xs font-semibold text-sage-700">
               <span className="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
               <span>100% Free & Open Developer Curriculum</span>
             </div>

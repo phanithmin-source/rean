@@ -65,20 +65,20 @@ export default async function TopicPage({ params }: TopicPageProps) {
 
       <main className="flex-1">
         {/* Topic Header Banner */}
-        <section className="border-b border-border bg-[#ECE8DC]/50 py-12 md:py-16">
+        <section className="border-b border-border/70 bg-gradient-to-b from-[#F2EFE6]/50 via-[#F8F7F2] to-[#F8F7F2] py-12 md:py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-2 text-xs font-semibold text-navy/70 mb-4">
               <Link href="/" className="hover:underline">
                 Explore
               </Link>
-              <span>/</span>
+              <span className="text-border">/</span>
               <span>Topics</span>
-              <span>/</span>
+              <span className="text-border">/</span>
               <span className="text-navy font-bold">{topic.name}</span>
             </div>
 
             <div className="flex flex-col sm:flex-row sm:items-center gap-5">
-              <div className="p-3.5 rounded-2xl bg-card border border-border shadow-xs w-fit">
+              <div className="p-4 rounded-2xl bg-card border border-border/80 shadow-xs w-fit">
                 {getTopicIcon(topic.icon)}
               </div>
               <div className="space-y-1.5">

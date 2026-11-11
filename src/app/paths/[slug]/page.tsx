@@ -75,32 +75,32 @@ export default async function PathDetailsPage({
 
       <main className="flex-1">
         {/* Path Header */}
-        <div className="border-b border-border bg-[#ECE8DC]/50 py-12 md:py-16">
+        <div className="border-b border-border/70 bg-gradient-to-b from-[#F2EFE6]/50 via-[#F8F7F2] to-[#F8F7F2] py-12 md:py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-2 text-xs font-medium text-navy/60 mb-6">
               <Link href="/" className="hover:underline">
                 Explore
               </Link>
-              <span>/</span>
+              <span className="text-border">/</span>
               <Link href="/paths" className="hover:underline">
                 Learning Paths
               </Link>
-              <span>/</span>
-              <span className="text-navy font-semibold">{path.title}</span>
+              <span className="text-border">/</span>
+              <span className="text-navy font-semibold truncate max-w-xs">{path.title}</span>
             </div>
 
             <div className="max-w-3xl space-y-4">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-sage-800 bg-sage-200 border border-sage-300 px-2.5 py-0.5 rounded-full">
+                <span className="text-xs font-bold uppercase tracking-wider text-sage-800 bg-sage-200/80 border border-sage-300/60 px-3 py-0.5 rounded-full">
                   {path.topic_name || "Engineering Path"}
                 </span>
-                <span className="text-xs font-semibold px-2 py-0.5 rounded bg-cream-200 border border-border text-navy flex items-center gap-1">
-                  <Clock className="w-3 h-3" />
+                <span className="text-xs font-semibold px-3 py-0.5 rounded-full bg-cream-100 border border-border/70 text-navy flex items-center gap-1 tnum">
+                  <Clock className="w-3 h-3 text-sage-600" />
                   <span>~{Math.round(totalMinutes / 60)} hrs total study</span>
                 </span>
               </div>
 
-              <h1 className="text-3xl sm:text-5xl font-extrabold text-navy tracking-tight">
+              <h1 className="text-3xl sm:text-5xl font-extrabold text-navy tracking-tight leading-tight">
                 {path.title}
               </h1>
 
@@ -115,7 +115,7 @@ export default async function PathDetailsPage({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Target Outcome */}
-            <div className="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-3">
+            <div className="p-6 sm:p-7 rounded-2xl border border-border/80 bg-card shadow-xs space-y-3">
               <div className="flex items-center gap-2 text-navy">
                 <CheckCircle2 className="w-5 h-5 text-emerald-600" />
                 <h2 className="text-sm font-bold uppercase tracking-wider">
@@ -128,7 +128,7 @@ export default async function PathDetailsPage({
             </div>
 
             {/* Prerequisites */}
-            <div className="p-6 rounded-2xl border border-border bg-card shadow-xs space-y-3">
+            <div className="p-6 sm:p-7 rounded-2xl border border-border/80 bg-card shadow-xs space-y-3">
               <div className="flex items-center gap-2 text-navy">
                 <ListChecks className="w-5 h-5 text-sage-600" />
                 <h2 className="text-sm font-bold uppercase tracking-wider">

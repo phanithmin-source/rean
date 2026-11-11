@@ -31,12 +31,12 @@ export function PublicHeader({ navItems }: PublicHeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border/80 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 transition-colors">
+    <header className="sticky top-0 z-40 w-full border-b border-border/70 bg-background/90 backdrop-blur-md supports-[backdrop-filter]:bg-background/80 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-        {/* Logo */}
+        {/* Real Logo with crisp presentation */}
         <Link
           href="/"
-          className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy rounded-lg p-0.5"
+          className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy/30 rounded-xl p-0.5"
           aria-label="Rean Home"
         >
           <ReanLogo size="sm" />
@@ -44,7 +44,7 @@ export function PublicHeader({ navItems }: PublicHeaderProps) {
 
         {/* Desktop Navigation */}
         <nav
-          className="hidden md:flex items-center gap-1 lg:gap-2"
+          className="hidden md:flex items-center gap-1.5"
           aria-label="Main Navigation"
         >
           {links.map((item) => {
@@ -53,10 +53,10 @@ export function PublicHeader({ navItems }: PublicHeaderProps) {
               <Link
                 key={item.url + item.label}
                 href={item.url}
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
+                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all duration-150 ${
                   active
                     ? "bg-navy text-white shadow-xs"
-                    : "text-navy/80 hover:text-navy hover:bg-cream-200"
+                    : "text-navy/75 hover:text-navy hover:bg-cream-200/80"
                 }`}
               >
                 {item.label}
@@ -66,10 +66,10 @@ export function PublicHeader({ navItems }: PublicHeaderProps) {
         </nav>
 
         {/* Right side Actions */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <Link
             href="/#catalog"
-            className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border border-border bg-card hover:bg-cream-200 text-navy transition-colors"
+            className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-1.5 rounded-full border border-border/80 bg-card hover:bg-cream-100 hover:border-navy/30 text-navy transition-all shadow-xs"
           >
             <Search className="w-3.5 h-3.5 text-navy-400" />
             <span>Search Catalog</span>
@@ -77,7 +77,7 @@ export function PublicHeader({ navItems }: PublicHeaderProps) {
 
           <Link
             href="/paths"
-            className="hidden lg:inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-sage-200 hover:bg-sage-300 text-navy-900 transition-colors"
+            className="hidden lg:inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-1.5 rounded-full bg-sage-100 border border-sage-300/80 hover:bg-sage-200 text-navy-900 transition-all shadow-xs"
           >
             <Compass className="w-3.5 h-3.5 text-sage-700" />
             <span>Start a Path</span>
@@ -86,15 +86,15 @@ export function PublicHeader({ navItems }: PublicHeaderProps) {
           {/* Mobile hamburger */}
           <button
             type="button"
-            className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-navy hover:bg-cream-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy"
+            className="md:hidden inline-flex items-center justify-center p-2 rounded-lg text-navy hover:bg-cream-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy/30"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-expanded={mobileMenuOpen}
             aria-label="Toggle navigation menu"
           >
             {mobileMenuOpen ? (
-              <X className="w-6 h-6" />
+              <X className="w-5 h-5" />
             ) : (
-              <Menu className="w-6 h-6" />
+              <Menu className="w-5 h-5" />
             )}
           </button>
         </div>

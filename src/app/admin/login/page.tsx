@@ -48,7 +48,7 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-md space-y-8">
         <div className="flex flex-col items-center text-center space-y-2">
           <ReanLogo size="lg" />
-          <h1 className="text-2xl font-bold tracking-tight text-navy pt-4">
+          <h1 className="text-2xl font-extrabold tracking-tight text-navy pt-4">
             Editor Sign In
           </h1>
           <p className="text-sm text-muted-foreground">
@@ -56,9 +56,9 @@ export default function AdminLoginPage() {
           </p>
         </div>
 
-        <div className="bg-card p-8 rounded-2xl border border-border shadow-sm">
+        <div className="bg-card p-8 rounded-2xl border border-border/80 shadow-xs">
           {error && (
-            <div className="mb-6 p-3 rounded-lg bg-destructive/10 border border-destructive/30 flex items-center gap-2 text-destructive text-xs font-semibold">
+            <div className="mb-6 p-3 rounded-xl bg-destructive/10 border border-destructive/20 flex items-center gap-2 text-destructive text-xs font-semibold">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{error}</span>
             </div>

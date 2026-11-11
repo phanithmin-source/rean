@@ -89,14 +89,14 @@ export default async function ResourceDetailsPage({
 
       <main className="flex-1">
         {/* Resource Header */}
-        <div className="border-b border-border bg-[#ECE8DC]/40 py-10 md:py-14">
+        <div className="border-b border-border/70 bg-gradient-to-b from-[#F2EFE6]/50 via-[#F8F7F2] to-[#F8F7F2] py-10 md:py-14">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Breadcrumb */}
             <div className="flex items-center gap-2 text-xs font-medium text-navy/60 mb-6">
               <Link href="/" className="hover:underline">
                 Explore
               </Link>
-              <span>/</span>
+              <span className="text-border">/</span>
               {resource.topic_slug && (
                 <>
                   <Link
@@ -105,7 +105,7 @@ export default async function ResourceDetailsPage({
                   >
                     {resource.topic_name}
                   </Link>
-                  <span>/</span>
+                  <span className="text-border">/</span>
                 </>
               )}
               <span className="text-navy font-semibold truncate max-w-xs">
@@ -117,14 +117,14 @@ export default async function ResourceDetailsPage({
               {/* Left 2 Cols: Main Info */}
               <div className="lg:col-span-2 space-y-4">
                 <div className="flex flex-wrap items-center gap-2">
-                  <Badge variant="sage" className="capitalize">
+                  <Badge variant="sage" className="capitalize rounded-full px-3 py-0.5 font-semibold text-xs">
                     {resource.type}
                   </Badge>
-                  <span className="text-xs font-semibold px-2 py-0.5 rounded bg-cream-200 border border-border text-navy capitalize">
+                  <span className="text-xs font-semibold px-3 py-0.5 rounded-full bg-cream-100 border border-border/70 text-navy capitalize">
                     {resource.difficulty} Level
                   </span>
                   {resource.topic_name && (
-                    <span className="text-xs font-semibold px-2 py-0.5 rounded bg-cream-100 text-navy/70 border border-border">
+                    <span className="text-xs font-semibold px-3 py-0.5 rounded-full bg-card text-navy/70 border border-border/70">
                       {resource.topic_name}
                     </span>
                   )}
@@ -144,7 +144,7 @@ export default async function ResourceDetailsPage({
                     {resource.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="text-xs font-mono px-2.5 py-1 rounded bg-card border border-border text-navy/80"
+                        className="text-xs font-mono px-2.5 py-1 rounded-md bg-card border border-border/80 text-navy/80"
                       >
                         #{tag}
                       </span>
@@ -154,7 +154,7 @@ export default async function ResourceDetailsPage({
               </div>
 
               {/* Right Col: Action Card */}
-              <div className="bg-card rounded-2xl border border-border p-6 shadow-sm space-y-4">
+              <div className="bg-card rounded-2xl border border-border/80 p-6 shadow-xs space-y-4">
                 <h2 className="text-xs font-bold uppercase tracking-wider text-navy/60">
                   Resource Actions
                 </h2>
@@ -164,7 +164,7 @@ export default async function ResourceDetailsPage({
                   {firstChapter && (
                     <Link
                       href={`/resources/${resource.slug}/${firstChapter.slug}${isPreview ? "?preview=true" : ""}`}
-                      className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg bg-navy text-white text-sm font-semibold hover:bg-navy-700 shadow-sm transition-all"
+                      className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-navy text-white text-sm font-semibold hover:bg-navy-700 shadow-xs hover:shadow-sm hover:-translate-y-0.5 transition-all"
                     >
                       <BookOpen className="w-4 h-4" />
                       <span>Read Online ({chapters.length} Chapters)</span>
@@ -176,7 +176,7 @@ export default async function ResourceDetailsPage({
                     <a
                       href={resource.download_asset.public_url}
                       download
-                      className="w-full flex items-center justify-between py-2.5 px-4 rounded-lg bg-cream-200 hover:bg-cream-300 text-navy border border-border text-sm font-semibold transition-all"
+                      className="w-full flex items-center justify-between py-2.5 px-4 rounded-xl bg-cream-100 hover:bg-cream-200 text-navy border border-border/80 text-sm font-semibold transition-all shadow-xs"
                     >
                       <div className="flex items-center gap-2">
                         <Download className="w-4 h-4 text-navy" />
@@ -184,7 +184,7 @@ export default async function ResourceDetailsPage({
                           {resource.download_asset.original_name}
                         </span>
                       </div>
-                      <span className="text-[11px] text-navy/60 font-mono">
+                      <span className="text-[11px] text-navy/60 font-mono tnum">
                         {(resource.download_asset.byte_size / 1024).toFixed(0)} KB
                       </span>
                     </a>
@@ -196,7 +196,7 @@ export default async function ResourceDetailsPage({
                       href={resource.source_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-card hover:bg-cream-100 text-navy border border-border text-sm font-medium transition-all"
+                      className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-card hover:bg-cream-100/60 text-navy border border-border/80 text-sm font-medium transition-all shadow-xs"
                     >
                       <ExternalLink className="w-4 h-4 text-navy/60" />
                       <span>Original Source / Documentation</span>
