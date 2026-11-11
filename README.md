@@ -1,4 +1,4 @@
-# Rean (រៀន)
+#  Rean (រៀន)
 
 > Public software development learning and resource platform with a private editorial Admin site.
 
@@ -6,7 +6,7 @@ Rean helps students and early-career software engineers in Cambodia and worldwid
 
 ---
 
-## 🎨 Brand & Design System
+## 🎨 Brand &amp; Design System
 
 Rean follows a calm editorial aesthetic with light reading surfaces, generous spacing, and accessible typography.
 
@@ -22,48 +22,55 @@ Rean follows a calm editorial aesthetic with light reading surfaces, generous sp
 - **Brand Logo**:
   - An icon-only coding book rendered on slate navy with soft sage spine and pale cyan code markers, paired with high-resolution brand assets.
 
----
-
 ## 🛠️ Technical Stack
 
-- **Framework**: [Next.js](https://nextjs.org/) (App Router, Server Components & Route Handlers)
+- **Framework**: [Next.js](https://nextjs.org/) (App Router, Server Components &amp; Route Handlers)
 - **Language**: TypeScript (strict mode enabled)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/) mapped to shadcn/ui semantic CSS variables
 - **Database**: PostgreSQL (with embedded `@electric-sql/pglite` fallback for zero-config local development, and standard `pg` connection pool support for external production databases)
-- **Markdown & Syntax Highlighting**: `marked` + `highlight.js` + `sanitize-html` (XSS-sanitized)
+- **Markdown &amp; Syntax Highlighting**: `marked` + `highlight.js` + `sanitize-html` (XSS-sanitized)
 - **Authentication**: Secure HTTP-only cookies with signed `jose` JWT session tokens and `bcryptjs` password hashing
 - **File Storage**: Persistent storage in `public/uploads` with database metadata tracking in `assets` table
 
 ---
 
-## 🚀 Quick Start & Local Setup
+## 🚀 Quick Start &amp; Local Setup
 
 ### 1. Prerequisites
+
 - **Node.js**: `v18.17.0+` (tested on Node v22)
 - **npm** (or pnpm / yarn)
 
 ### 2. Install Dependencies
+
 ```bash
 npm install
 ```
 
 ### 3. Run Database Migrations
+
 Creates the PostgreSQL schema (topics, resources, chapters, learning paths, pages, navigation, assets, admins, site settings):
+
 ```bash
 npm run db:migrate
 ```
 
 ### 4. Seed Launch Content
+
 Seeds the 5 core learning domains, launch resources (including the flagship Java guide with 5 chapters, downloadable PDF, and Study Session Tracker source code), learning paths, navigation, and default admin:
+
 ```bash
 npm run db:seed
 ```
+
 > **Note**: The seed script is completely idempotent and preserves existing editorial changes when rerun.
 
 ### 5. Start Development Server
+
 ```bash
 npm run dev
 ```
+
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
@@ -82,11 +89,13 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 Copy or configure the following variables in `.env.local` or your production environment:
 
-| Variable | Description | Default / Example |
-| --- | --- | --- |
-| `DATABASE_URL` | Optional PostgreSQL connection string. When omitted, Rean automatically uses persistent disk storage at `./data/rean-pgdata` via PGlite. | `postgresql://postgres:password@localhost:5432/rean` |
-| `ADMIN_JWT_SECRET` | Secret key used to sign and verify administrative session tokens. | `rean-secure-editorial-secret-key-salt-2026` |
-| `PORT` | Local server port. | `3000` |
+
+| Variable           | Description                                                                                                                              | Default / Example                                    |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| `DATABASE_URL`     | Optional PostgreSQL connection string. When omitted, Rean automatically uses persistent disk storage at `./data/rean-pgdata` via PGlite. | `postgresql://postgres:password@localhost:5432/rean` |
+| `ADMIN_JWT_SECRET` | Secret key used to sign and verify administrative session tokens.                                                                        | `rean-secure-editorial-secret-key-salt-2026`         |
+| `PORT`             | Local server port.                                                                                                                       | `3000`                                               |
+
 
 ---
 
@@ -124,21 +133,22 @@ Copy or configure the following variables in `.env.local` or your production env
 
 ---
 
-## 🔒 Admin Site & Publishing Lifecycle
+## 🔒 Admin Site &amp; Publishing Lifecycle
 
 The Admin site at `/admin` empowers editors to update all public-facing editorial content directly from the browser without code changes or redeployments:
 
 - **Topics**: Manage names, slugs, descriptions, icons, display orders, and visibility.
 - **Resources**: Manage titles, summaries, markdown descriptions, format types, difficulty levels, topic associations, tags, external links, curation notes, download asset attachments, and homepage featured placement.
-- **Books & Chapters**: Full Markdown editor with syntax highlighting, chapter ordering, and reader linking.
+- **Books &amp; Chapters**: Full Markdown editor with syntax highlighting, chapter ordering, and reader linking.
 - **Learning Paths**: Manage roadmaps, outcomes, prerequisites, ordered lessons, resource associations, and capstone tasks.
 - **Explore Homepage**: Edit hero headlines, subheadings, and section titles.
 - **About Page**: Edit mission, audience, pedagogy, criteria, and call-to-action buttons.
-- **Navigation & Footer**: Manage menu labels, destinations, display ordering, and footer copyright copy.
-- **Media & Downloads**: Upload, inspect, replace, and delete PDFs, archives, and images. Enforces dependency checking to show where assets are used before deletion.
-- **Site Settings & SEO**: Manage site name, global description, logo, favicon, social image, and page-level SEO meta tags.
+- **Navigation &amp; Footer**: Manage menu labels, destinations, display ordering, and footer copyright copy.
+- **Media &amp; Downloads**: Upload, inspect, replace, and delete PDFs, archives, and images. Enforces dependency checking to show where assets are used before deletion.
+- **Site Settings &amp; SEO**: Manage site name, global description, logo, favicon, social image, and page-level SEO meta tags.
 
-### Draft Isolation & Publishing State
+### Draft Isolation &amp; Publishing State
+
 - **Draft Revisions**: When editors save changes, they are stored in draft state (`has_draft_changes = true`).
 - **Live Version Preserved**: The last published version remains live and unchanged on public pages until the editor clicks **Publish**.
 - **Private Previews**: Editors can preview draft content before publishing via authenticated `?preview=true` queries.
@@ -150,10 +160,13 @@ The Admin site at `/admin` empowers editors to update all public-facing editoria
 ## 🧪 Automated Verification Suite
 
 Run the full end-to-end verification test suite:
+
 ```bash
 npm run verify
 ```
+
 This executes **32 automated checks** covering:
+
 - Database connectivity, schema tables, and seed idempotency
 - Full-text catalog search and multi-facet filtering
 - Shared URL state restoration
@@ -169,26 +182,31 @@ This executes **32 automated checks** covering:
 
 ---
 
-## 📦 Build & Production Deployment
+## 📦 Build &amp; Production Deployment
 
-### Production Typecheck & Lint
+### Production Typecheck &amp; Lint
+
 ```bash
 npm run lint
 npx tsc --noEmit
 ```
 
 ### Production Build
+
 ```bash
 npm run build
 ```
 
 ### Start Production Server
+
 ```bash
 npm run start
 ```
 
 ### Docker Deployment
+
 Rean is server-capable and can be packaged into a standard Node.js Docker container:
+
 ```dockerfile
 FROM node:22-alpine AS runner
 WORKDIR /app
@@ -204,4 +222,5 @@ CMD ["npm", "run", "start"]
 ---
 
 ## 📄 License
+
 Dedicated to software craftsmanship, open educational resources, and student empowerment.

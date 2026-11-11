@@ -15,7 +15,7 @@ declare global {
   // eslint-disable-next-line no-var
   var __rean_db_instance: DbClient | undefined;
   // eslint-disable-next-line no-var
-  var __rean_db_migrated: boolean | undefined;
+  var __rean_db_promise: Promise<DbClient> | undefined;
 }
 
 async function createClient(): Promise<DbClient> {
@@ -75,6 +75,7 @@ async function createClient(): Promise<DbClient> {
   }
 
   const pglite = new PGlite(dataDir);
+  await pglite.waitReady;
 
   const client: DbClient = {
     async query<T = any>(sql: string, params?: any[]): Promise<QueryResult<T>> {
@@ -107,17 +108,20 @@ async function createClient(): Promise<DbClient> {
 }
 
 export async function getDb(): Promise<DbClient> {
-  if (!globalThis.__rean_db_instance) {
-    globalThis.__rean_db_instance = await createClient();
+  if (globalThis.__rean_db_instance) {
+    return globalThis.__rean_db_instance;
   }
 
-  // Ensure migrations are run on first access
-  if (!globalThis.__rean_db_migrated) {
-    await runMigrationsInternal(globalThis.__rean_db_instance);
-    globalThis.__rean_db_migrated = true;
+  if (!globalThis.__rean_db_promise) {
+    globalThis.__rean_db_promise = (async () => {
+      const db = await createClient();
+      await runMigrationsInternal(db);
+      globalThis.__rean_db_instance = db;
+      return db;
+    })();
   }
 
-  return globalThis.__rean_db_instance;
+  return await globalThis.__rean_db_promise;
 }
 
 export async function query<T = any>(sql: string, params?: any[]): Promise<QueryResult<T>> {
@@ -135,7 +139,6 @@ async function runMigrationsInternal(db: DbClient) {
   if (!fs.existsSync(schemaPath)) return;
 
   const schemaSql = fs.readFileSync(schemaPath, "utf-8");
-  // Split statements safely
   const statements = schemaSql
     .split(";")
     .map((s) => s.trim())
@@ -145,7 +148,7 @@ async function runMigrationsInternal(db: DbClient) {
     try {
       await db.query(statement);
     } catch (err: any) {
-      console.warn("Migration statement notice/error:", statement.slice(0, 50), err.message);
+      console.warn("Migration notice:", statement.slice(0, 40), err.message);
     }
   }
 }
