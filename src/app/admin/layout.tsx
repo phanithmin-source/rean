@@ -16,7 +16,7 @@ export default async function AdminLayout({
   // We can let page-level checks or layout handle this.
   // Note: if user is on /admin/login, session can be null.
   return (
-    <div className="min-h-screen bg-[#FAF9F5] text-navy flex flex-col md:flex-row">
+    <div className="admin-workspace flex flex-col lg:flex-row">
       {session && <AdminSidebar session={session} />}
       <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
         {children}

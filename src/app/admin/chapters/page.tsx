@@ -346,7 +346,7 @@ export default function AdminChaptersPage() {
 
       {/* Chapter Markdown Editor Modal */}
       {isEditorOpen && (
-        <div className="fixed inset-0 z-50 bg-navy/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-primary/60 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-card rounded-2xl border border-border shadow-xl max-w-4xl w-full p-6 sm:p-8 space-y-5 max-h-[90vh] flex flex-col animate-in zoom-in-95">
             <div className="border-b border-border pb-4 flex items-center justify-between">
               <div>

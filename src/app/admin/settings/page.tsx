@@ -31,8 +31,6 @@ export default function AdminSettingsPage() {
     meta_explore_desc: "",
     meta_about_title: "",
     meta_about_desc: "",
-    meta_paths_title: "",
-    meta_paths_desc: "",
   });
 
   const fetchSettings = async () => {
@@ -54,8 +52,6 @@ export default function AdminSettingsPage() {
         meta_explore_desc: s.meta_descriptions?.explore || "",
         meta_about_title: s.meta_titles?.about || "",
         meta_about_desc: s.meta_descriptions?.about || "",
-        meta_paths_title: s.meta_titles?.paths || "",
-        meta_paths_desc: s.meta_descriptions?.paths || "",
       });
     } catch (err: any) {
       setError(err.message);
@@ -85,12 +81,10 @@ export default function AdminSettingsPage() {
         meta_titles: {
           explore: formData.meta_explore_title,
           about: formData.meta_about_title,
-          paths: formData.meta_paths_title,
         },
         meta_descriptions: {
           explore: formData.meta_explore_desc,
           about: formData.meta_about_desc,
-          paths: formData.meta_paths_desc,
         },
       };
 
@@ -268,29 +262,6 @@ export default function AdminSettingsPage() {
                 <Input
                   value={formData.meta_about_desc}
                   onChange={(e) => setFormData({ ...formData, meta_about_desc: e.target.value })}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Learning Paths Page SEO */}
-          <div className="space-y-3 p-4 rounded-xl bg-cream-50/70 border border-border">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-navy">
-              Learning Paths ( /paths )
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-muted-foreground">Page Title Tag</label>
-                <Input
-                  value={formData.meta_paths_title}
-                  onChange={(e) => setFormData({ ...formData, meta_paths_title: e.target.value })}
-                />
-              </div>
-              <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-muted-foreground">Meta Description</label>
-                <Input
-                  value={formData.meta_paths_desc}
-                  onChange={(e) => setFormData({ ...formData, meta_paths_desc: e.target.value })}
                 />
               </div>
             </div>

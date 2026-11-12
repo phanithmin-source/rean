@@ -1,8 +1,8 @@
 #  Rean (រៀន)
 
-> Public software development learning and resource platform with a private editorial Admin site.
+> A curated developer resource directory with a private editorial studio.
 
-Rean helps students and early-career software engineers in Cambodia and worldwide discover curated software resources, follow disciplined learning paths, and build portfolio-grade practice projects.
+Rean helps students and developers discover useful tools, books, guides, documentation, and practical projects. Search the directory, browse categories, or explore staff picks. The About page introduces Min Phanith, Full Stack Developer, with a portrait and contact links.
 
 ---
 
@@ -10,11 +10,12 @@ Rean helps students and early-career software engineers in Cambodia and worldwid
 
 Rean follows a calm editorial aesthetic with light reading surfaces, generous spacing, and accessible typography.
 
+- **Visual direction**: Bright white surfaces, soft mint accents, spacious cards, and a lightweight animated coding illustration. Motion respects reduced-motion preferences.
 - **Color Palette**:
-  - **Slate Navy** (`#343D4F`): Primary typography, primary buttons, and dark contrast surfaces.
-  - **Soft Sage** (`#A8C8B2`): Main book outline, center fold, and positive progression accents.
+  - **Slate Navy** (`#343D4F`): Primary typography and code surfaces.
+  - **Soft Sage** (`#A8C8B2`): Soft category, card, and progression accents. Primary actions use green (`#087F64`).
   - **Pale Cyan** (`#BCE5E8`): Outer book outline and coding symbols (`< >`, `{ }`, `//`, `;`).
-  - **Off-White / Cream** (`#F7F5EE`): Calm reading surface background.
+  - **Soft White** (`#FAFCFB`): Calm reading surface background.
 - **Typography**:
   - **Geist**: Clean, modern interface and sans-serif typography.
   - **Noto Sans Khmer**: Native Khmer script support (`រៀន`).
@@ -49,7 +50,7 @@ npm install
 
 ### 3. Run Database Migrations
 
-Creates the PostgreSQL schema (topics, resources, chapters, learning paths, pages, navigation, assets, admins, site settings):
+Creates the PostgreSQL schema (topics, resources, chapters, archived legacy paths, pages, navigation, assets, admins, site settings):
 
 ```bash
 npm run db:migrate
@@ -57,7 +58,7 @@ npm run db:migrate
 
 ### 4. Seed Launch Content
 
-Seeds the 5 core learning domains, launch resources (including the flagship Java guide with 5 chapters, downloadable PDF, and Study Session Tracker source code), learning paths, navigation, and default admin:
+Seeds the 5 core learning domains, launch resources (including the flagship Java guide with 5 chapters, downloadable PDF, and Study Session Tracker source code), navigation, the creator profile, and default admin:
 
 ```bash
 npm run db:seed
@@ -103,14 +104,14 @@ Copy or configure the following variables in `.env.local` or your production env
 
 1. **Explore (`/`)**
    - Editable hero title and intro copy.
-   - Prominent search bar with real-time filtering across title, summary, markdown description, topics, and tags.
+   - Prominent search bar with search and filtering across title, summary, markdown description, topics, and tags.
    - Topic pills, format filter dropdown (Book, Guide, Course, Tool, Doc, Project), and difficulty filter (Beginner, Intermediate, Advanced).
    - Filter state synced to URL parameters (`?q=...&topic=...&type=...&difficulty=...`) for shareable search links.
    - Result counts, clear-filters action, and helpful empty state.
    - Featured topics grid and curated picks highlights.
 2. **Topics (`/topics/[slug]`)**
    - Topic overview and description.
-   - Published resources and structured learning paths belonging to the topic.
+   - Published resources belonging to the category.
    - Seeded topics: **Programming**, **Frontend**, **Backend**, **Databases**, **Developer Tools**.
 3. **Resource Details (`/resources/[slug]`)**
    - Explains what the resource covers, who it is for, and when to use it.
@@ -122,14 +123,13 @@ Copy or configure the following variables in `.env.local` or your production env
    - Distraction-free reading surface with syntax-highlighted code.
    - Code blocks with horizontal scroll (`overflow-x-auto`) for long lines.
    - Chapter table of contents sidebar, chapter progress indicator, and previous/next chapter navigation.
-5. **Learning Paths (`/paths` and `/paths/[slug]`)**
-   - Seeded paths: **Programming Foundations** and **Backend Foundations**.
-   - Shows target outcome, prerequisites, ordered lessons with resource links and study durations.
-   - Capstone practice task (e.g., *Study Session Tracker REST API* and *CLI Task Organizer*).
+5. **Categories (`/topics`)**
+   - Browse all published categories with descriptions and resource counts.
+   - Legacy `/paths` URLs redirect here; legacy Admin path URLs redirect to resources. Archived path records are retained.
 6. **About (`/about`)**
    - Explains Rean's mission, audience, learning approach, and resource selection criteria.
    - Fully editable from the Admin site.
-   - Strict omission of founder/developer profiles or personal attribution.
+   - Creator profile with Min Phanith?s photo, role, short bio, GitHub, Telegram, LinkedIn, and email. Editable through Admin ? About.
 
 ---
 
@@ -140,9 +140,8 @@ The Admin site at `/admin` empowers editors to update all public-facing editoria
 - **Topics**: Manage names, slugs, descriptions, icons, display orders, and visibility.
 - **Resources**: Manage titles, summaries, markdown descriptions, format types, difficulty levels, topic associations, tags, external links, curation notes, download asset attachments, and homepage featured placement.
 - **Books &amp; Chapters**: Full Markdown editor with syntax highlighting, chapter ordering, and reader linking.
-- **Learning Paths**: Manage roadmaps, outcomes, prerequisites, ordered lessons, resource associations, and capstone tasks.
 - **Explore Homepage**: Edit hero headlines, subheadings, and section titles.
-- **About Page**: Edit mission, audience, pedagogy, criteria, and call-to-action buttons.
+- **About Page**: Edit the creator profile, photo path, contact links, mission, audience, criteria, and catalog call to action.
 - **Navigation &amp; Footer**: Manage menu labels, destinations, display ordering, and footer copyright copy.
 - **Media &amp; Downloads**: Upload, inspect, replace, and delete PDFs, archives, and images. Enforces dependency checking to show where assets are used before deletion.
 - **Site Settings &amp; SEO**: Manage site name, global description, logo, favicon, social image, and page-level SEO meta tags.
@@ -153,7 +152,7 @@ The Admin site at `/admin` empowers editors to update all public-facing editoria
 - **Live Version Preserved**: The last published version remains live and unchanged on public pages until the editor clicks **Publish**.
 - **Private Previews**: Editors can preview draft content before publishing via authenticated `?preview=true` queries.
 - **Atomic Publishing**: Clicking **Publish** updates live fields, resets draft flags, updates timestamps, and triggers Next.js cache revalidation.
-- **Integrity Guards**: The system prevents deleting topics or assets currently in use, and blocks unpublishing resources required by active learning paths.
+- **Integrity Guards**: The system prevents deleting topics or assets currently in use, while resources can be managed independently of archived paths.
 
 ---
 
@@ -163,6 +162,9 @@ Run the full end-to-end verification test suite:
 
 ```bash
 npm run verify
+
+# Rendered HTTP page audit (starts and stops a local dev server)
+node node_modules/tsx/dist/cli.mjs scripts/audit-ui.ts
 ```
 
 This executes **32 automated checks** covering:
@@ -174,7 +176,7 @@ This executes **32 automated checks** covering:
 - Admin resource creation, draft saving, and live publishing
 - Draft isolation (unpublished edits remaining private while live copy stays visible)
 - Private preview route verification
-- Omission of founder profiles on About page
+- Creator identity, GitHub link, and portrait availability on About
 - Dynamic navigation link modification
 - Admin authentication and JWT token security
 - Integrity blocks preventing deletion of in-use topics and assets

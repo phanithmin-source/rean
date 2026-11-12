@@ -251,7 +251,7 @@ export default function AdminNavigationPage() {
 
       {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-navy/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-primary/60 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-card rounded-2xl border border-border shadow-xl max-w-md w-full p-6 sm:p-8 space-y-4 animate-in zoom-in-95">
             <h2 className="text-xl font-bold text-navy border-b border-border pb-3">
               {activeItem ? `Edit Link: ${activeItem.label}` : "Add Navigation Link"}

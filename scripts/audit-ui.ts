@@ -80,34 +80,77 @@ async function main() {
     // Public routes
     { path: "/", name: "Explore Homepage" },
     { path: "/about", name: "About Page" },
+    { path: "/topics", name: "Categories Directory" },
+    {
+      path: "/?q=Java&type=book&difficulty=beginner",
+      name: "Filtered Catalog",
+    },
+    { path: "/?q=does-not-exist-xyz", name: "Catalog Empty State" },
+    { path: "/assets/ME.png", name: "Creator Portrait" },
     { path: "/topics/programming", name: "Topic: Programming" },
     { path: "/topics/backend", name: "Topic: Backend" },
     { path: "/topics/frontend", name: "Topic: Frontend" },
     { path: "/topics/databases", name: "Topic: Databases" },
     { path: "/topics/developer-tools", name: "Topic: Developer Tools" },
     { path: "/resources/java-programming", name: "Resource: Java Guide" },
-    { path: "/resources/java-programming/01-modern-java-and-oop-foundations", name: "Chapter Reader: Java Ch 1" },
+    {
+      path: "/resources/java-programming/01-modern-java-and-oop-foundations",
+      name: "Chapter Reader: Java Ch 1",
+    },
     { path: "/paths", name: "Learning Paths Index" },
     { path: "/paths/backend-foundations", name: "Path: Backend Foundations" },
-    { path: "/paths/programming-foundations", name: "Path: Programming Foundations" },
+    {
+      path: "/paths/programming-foundations",
+      name: "Path: Programming Foundations",
+    },
     // Public asset check
     { path: "/images/logo.png", name: "Logo PNG image asset" },
-    { path: "/uploads/practical-java-handbook.pdf", name: "Java Handbook PDF asset" },
-    { path: "/uploads/study-session-tracker.zip", name: "Study Session ZIP asset" },
+    {
+      path: "/uploads/practical-java-handbook.pdf",
+      name: "Java Handbook PDF asset",
+    },
+    {
+      path: "/uploads/study-session-tracker.zip",
+      name: "Study Session ZIP asset",
+    },
     // Admin routes
     { path: "/admin/login", name: "Admin Login" },
     { path: "/admin", name: "Admin Dashboard", headers: adminHeaders },
     { path: "/admin/topics", name: "Admin Topics", headers: adminHeaders },
-    { path: "/admin/resources", name: "Admin Resources", headers: adminHeaders },
-    { path: "/admin/resources/new", name: "Admin New Resource", headers: adminHeaders },
+    {
+      path: "/admin/resources",
+      name: "Admin Resources",
+      headers: adminHeaders,
+    },
+    {
+      path: "/admin/resources/new",
+      name: "Admin New Resource",
+      headers: adminHeaders,
+    },
     { path: "/admin/chapters", name: "Admin Chapters", headers: adminHeaders },
     { path: "/admin/paths", name: "Admin Paths", headers: adminHeaders },
     { path: "/admin/paths/new", name: "Admin New Path", headers: adminHeaders },
-    { path: "/admin/explore", name: "Admin Explore Editor", headers: adminHeaders },
+    {
+      path: "/admin/explore",
+      name: "Admin Explore Editor",
+      headers: adminHeaders,
+    },
     { path: "/admin/about", name: "Admin About Editor", headers: adminHeaders },
-    { path: "/admin/navigation", name: "Admin Navigation Editor", headers: adminHeaders },
-    { path: "/admin/assets", name: "Admin Assets & Media", headers: adminHeaders },
-    { path: "/admin/settings", name: "Admin Site Settings", headers: adminHeaders },
+    {
+      path: "/admin/navigation",
+      name: "Admin Navigation Editor",
+      headers: adminHeaders,
+    },
+    {
+      path: "/admin/assets",
+      name: "Admin Assets & Media",
+      headers: adminHeaders,
+    },
+    {
+      path: "/admin/settings",
+      name: "Admin Site Settings",
+      headers: adminHeaders,
+    },
   ];
 
   let errorsFound = 0;
@@ -123,6 +166,14 @@ async function main() {
         continue;
       }
 
+      if (
+        page.path.startsWith("/paths") &&
+        !result.html.includes("Find your corner of the directory.")
+      ) {
+        errorsFound++;
+        console.error("Retired path did not redirect to categories");
+      }
+
       // If HTML, check for common UI issues
       if (result.contentType.includes("text/html")) {
         const issues: string[] = [];
@@ -135,17 +186,23 @@ async function main() {
         // Check for undefined / null rendered in visible text
         const matches = cleanHtml.match(/>[^<]*\bundefined\b[^<]*</g);
         if (matches) {
-          issues.push(`Visible 'undefined' text: ${matches.slice(0, 3).join(", ")}`);
+          issues.push(
+            `Visible 'undefined' text: ${matches.slice(0, 3).join(", ")}`,
+          );
         }
 
         // Check for NaN in visible text
         const nanMatches = cleanHtml.match(/>[^<]*\bNaN\b[^<]*</g);
         if (nanMatches) {
-          issues.push(`Visible 'NaN' text: ${nanMatches.slice(0, 3).join(", ")}`);
+          issues.push(
+            `Visible 'NaN' text: ${nanMatches.slice(0, 3).join(", ")}`,
+          );
         }
 
         // Check for broken img src
-        const emptyImg = result.html.match(/<img[^>]+src=["'](undefined|null|)["']/g);
+        const emptyImg = result.html.match(
+          /<img[^>]+src=["'](undefined|null|)["']/g,
+        );
         if (emptyImg) {
           issues.push(`Broken image src: ${emptyImg.join(", ")}`);
         }
@@ -158,19 +215,48 @@ async function main() {
 
         // Check for logo presence
         if (page.path === "/" || page.path === "/admin") {
-          if (!result.html.includes("logo.png") && !result.html.includes("Rean")) {
+          if (
+            !result.html.includes("logo.png") &&
+            !result.html.includes("Rean")
+          ) {
             issues.push("Logo or Rean text not found in rendered markup");
           }
         }
 
+        if (page.path === "/about") {
+          for (const expected of [
+            "Min Phanith",
+            "Full Stack Developer",
+            "https://github.com/Immonkei",
+            "https://t.me/minphanith",
+            "https://www.linkedin.com/in/minpanith/",
+            "minn.phanithh@gmail.com",
+            "%2Fassets%2FME.png",
+          ]) {
+            if (!result.html.includes(expected))
+              issues.push("Missing profile detail: " + expected);
+          }
+        }
+        if (page.path === "/") {
+          if (!result.html.includes("learning-illustration"))
+            issues.push("Missing animated illustration");
+          if (!result.html.includes("Staff picks"))
+            issues.push("Missing staff picks");
+          if (cleanHtml.includes('href="/paths'))
+            issues.push("Retired learning path navigation remains visible");
+        }
         if (issues.length > 0) {
           console.warn(`⚠️ ${page.name} (${page.path}) had issues:`, issues);
           errorsFound += issues.length;
         } else {
-          console.log(`✅ [200 OK] ${page.name} (${page.path}) - HTML ${result.length} bytes`);
+          console.log(
+            `✅ [200 OK] ${page.name} (${page.path}) - HTML ${result.length} bytes`,
+          );
         }
       } else {
-        console.log(`✅ [200 OK] ${page.name} (${page.path}) - ${result.contentType} (${result.length} bytes)`);
+        console.log(
+          `✅ [200 OK] ${page.name} (${page.path}) - ${result.contentType} (${result.length} bytes)`,
+        );
       }
     } catch (err: any) {
       console.error(`❌ Error fetching ${page.name}:`, err.message);

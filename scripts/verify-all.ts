@@ -4,7 +4,7 @@ import {
   searchResources,
   getResourceBySlug,
   getChapterDetails,
-  getLearningPathBySlug,
+  getTopics,
   getPageCopy,
   getNavigationItems,
   getSiteSettings,
@@ -48,25 +48,46 @@ async function runAllVerifications() {
   await seedDatabase();
 
   const topicsRes = await query("SELECT COUNT(*) as count FROM topics");
-  assert(parseInt(topicsRes.rows[0].count, 10) >= 5, "All 5 core topics seeded in PostgreSQL");
+  assert(
+    parseInt(topicsRes.rows[0].count, 10) >= 5,
+    "All 5 core topics seeded in PostgreSQL",
+  );
 
-  const javaRes = await query("SELECT id, slug, title FROM resources WHERE slug = 'java-programming'");
+  const javaRes = await query(
+    "SELECT id, slug, title FROM resources WHERE slug = 'java-programming'",
+  );
   assert(javaRes.rows.length === 1, "Flagship Java resource exists");
 
-  const chaptersRes = await query("SELECT COUNT(*) as count FROM chapters WHERE resource_id = $1", [javaRes.rows[0].id]);
-  assert(parseInt(chaptersRes.rows[0].count, 10) === 5, "Java resource contains 5 rich Markdown chapters");
+  const chaptersRes = await query(
+    "SELECT COUNT(*) as count FROM chapters WHERE resource_id = $1",
+    [javaRes.rows[0].id],
+  );
+  assert(
+    parseInt(chaptersRes.rows[0].count, 10) === 5,
+    "Java resource contains 5 rich Markdown chapters",
+  );
 
-  const pathsRes = await query("SELECT COUNT(*) as count FROM learning_paths");
-  assert(parseInt(pathsRes.rows[0].count, 10) >= 2, "Both Programming and Backend Foundations learning paths seeded");
+  const nav = await getNavigationItems();
+  assert(
+    ![...nav.header, ...nav.footer].some((item) =>
+      item.url.startsWith("/paths"),
+    ),
+    "Public navigation has no retired learning paths",
+  );
 
   // 2. Reader Search & Filter Workflow
   console.log("\n--- 2. Verifying Reader Search, Filtering & URL Workflow ---");
   // Search for "REST API"
   const searchResult = await searchResources({ searchQuery: "REST API" });
-  assert(searchResult.totalCount > 0, "Reader can search for 'REST API' and find results");
   assert(
-    searchResult.resources.some((r) => r.slug === "restful-api-design-guide" || r.title.includes("REST")),
-    "Search returns RESTful API guide"
+    searchResult.totalCount > 0,
+    "Reader can search for 'REST API' and find results",
+  );
+  assert(
+    searchResult.resources.some(
+      (r) => r.slug === "restful-api-design-guide" || r.title.includes("REST"),
+    ),
+    "Search returns RESTful API guide",
   );
 
   // Filter to beginner resources
@@ -74,19 +95,28 @@ async function runAllVerifications() {
     searchQuery: "REST API",
     difficulty: "beginner",
   });
-  assert(beginnerResult.totalCount > 0, "Reader can filter search results to 'beginner' difficulty");
+  assert(
+    beginnerResult.totalCount > 0,
+    "Reader can filter search results to 'beginner' difficulty",
+  );
 
   // Chapter reader with Markdown and syntax highlighting
-  const chapterData = await getChapterDetails("java-programming", "01-modern-java-and-oop-foundations");
+  const chapterData = await getChapterDetails(
+    "java-programming",
+    "01-modern-java-and-oop-foundations",
+  );
   assert(chapterData.chapter !== null, "Chapter reader loads chapter data");
-  assert(chapterData.chapter!.rendered_html.includes("<code"), "Markdown rendered with code highlighting tags");
-  assert(chapterData.nextChapter !== null, "Sequential next chapter link resolved");
+  assert(
+    chapterData.chapter!.rendered_html.includes("<code"),
+    "Markdown rendered with code highlighting tags",
+  );
+  assert(
+    chapterData.nextChapter !== null,
+    "Sequential next chapter link resolved",
+  );
 
-  // Following a learning path to practice project
-  const backendPath = await getLearningPathBySlug("backend-foundations");
-  assert(backendPath !== null, "Learning path 'backend-foundations' loaded");
-  assert(backendPath!.final_task_title.includes("Study Session Tracker"), "Path includes capstone practice task");
-  assert(backendPath!.steps!.length === 4, "Path has 4 ordered progression steps");
+  const categories = await getTopics();
+  assert(categories.length >= 5, "Directory categories remain discoverable");
 
   // 3. Admin Content Management Workflow
   console.log("\n--- 3. Verifying Admin Editorial Workflow & Mutations ---");
@@ -107,15 +137,23 @@ async function runAllVerifications() {
 
   // Verify draft is NOT visible in public search
   const pubSearchDraft = await searchResources({ searchQuery: testTitle });
-  assert(pubSearchDraft.totalCount === 0, "Draft resource is NOT visible on public catalog");
+  assert(
+    pubSearchDraft.totalCount === 0,
+    "Draft resource is NOT visible on public catalog",
+  );
 
   // Publish resource
   await publishResourceAdmin(created.id);
   const pubSearchLive = await searchResources({ searchQuery: testTitle });
-  assert(pubSearchLive.totalCount === 1, "Published resource is immediately discoverable in public catalog");
+  assert(
+    pubSearchLive.totalCount === 1,
+    "Published resource is immediately discoverable in public catalog",
+  );
 
   // 4. Draft Isolation: Last Published Version Stays Live
-  console.log("\n--- 4. Verifying Draft Isolation & Private Editorial State ---");
+  console.log(
+    "\n--- 4. Verifying Draft Isolation & Private Editorial State ---",
+  );
   // Get initial live About page copy
   const liveAboutBefore = await getPageCopy("about");
   const initialMission = liveAboutBefore.mission;
@@ -123,28 +161,37 @@ async function runAllVerifications() {
   // Editor saves a draft modification to About
   await savePageDraftAdmin("about", {
     ...liveAboutBefore,
-    mission: "MODIFIED DRAFT MISSION: Empowering the next generation of engineers.",
+    mission:
+      "MODIFIED DRAFT MISSION: Empowering the next generation of engineers.",
   });
 
   // Verify public site STILL serves the original published copy
   const liveAboutDuringDraft = await getPageCopy("about", { preview: false });
   assert(
     liveAboutDuringDraft.mission === initialMission,
-    "Unpublished About draft edit stays private; previous version remains live!"
+    "Unpublished About draft edit stays private; previous version remains live!",
   );
 
   // Verify preview mode with admin authentication serves draft
   const previewAbout = await getPageCopy("about", { preview: true });
   assert(
     previewAbout.mission.includes("MODIFIED DRAFT MISSION"),
-    "Admin preview mode serves the updated draft copy"
+    "Admin preview mode serves the updated draft copy",
   );
 
-  // Check no founder/developer profile in About content
-  const aboutText = JSON.stringify(liveAboutDuringDraft).toLowerCase();
   assert(
-    !aboutText.includes("founder") && !aboutText.includes("creator profile") && !aboutText.includes("author profile"),
-    "About page focuses strictly on Rean and contains no personal founder or developer profiles"
+    liveAboutDuringDraft.profileName === "Min Phanith",
+    "About contains the requested creator identity",
+  );
+  assert(
+    liveAboutDuringDraft.profileGithub === "https://github.com/Immonkei",
+    "About contains the requested GitHub profile",
+  );
+  assert(
+    fs.existsSync(
+      path.join(process.cwd(), "public", liveAboutDuringDraft.profilePhoto),
+    ),
+    "Creator photo exists on disk",
   );
 
   // Publish About page and verify live update
@@ -152,7 +199,7 @@ async function runAllVerifications() {
   const liveAboutAfter = await getPageCopy("about", { preview: false });
   assert(
     liveAboutAfter.mission.includes("MODIFIED DRAFT MISSION"),
-    "Publishing About page updates public live version"
+    "Publishing About page updates public live version",
   );
 
   // Clean up About page back to canonical
@@ -167,7 +214,7 @@ async function runAllVerifications() {
   const testNavLabel = `Special Hub ${Date.now()}`;
   const navItem = await saveNavigationItemAdmin({
     label: testNavLabel,
-    url: "/paths",
+    url: "/topics",
     display_order: 99,
     position: "header",
     is_published: true,
@@ -175,8 +222,11 @@ async function runAllVerifications() {
   const navAfter = await getNavigationItems();
   assert(
     navAfter.header.some((n) => n.label === testNavLabel),
-    "Admin can update navigation links dynamically"
+    "Admin can update navigation links dynamically",
   );
+
+  await query("DELETE FROM navigation_items WHERE id = $1", [navItem.id]);
+  await query("DELETE FROM resources WHERE id = $1", [created.id]);
 
   // 6. Security, Authentication & Access Control
   console.log("\n--- 6. Verifying Security & Authorization Enforcements ---");
@@ -188,7 +238,10 @@ async function runAllVerifications() {
   };
   const token = await createSessionToken(adminSession);
   const verified = await verifySessionToken(token);
-  assert(verified !== null && verified.email === "admin@rean.dev", "Admin JWT session verification succeeds");
+  assert(
+    verified !== null && verified.email === "admin@rean.dev",
+    "Admin JWT session verification succeeds",
+  );
 
   const invalidVerified = await verifySessionToken("tampered.jwt.token");
   assert(invalidVerified === null, "Tampered/invalid tokens rejected");
@@ -203,7 +256,7 @@ async function runAllVerifications() {
     topicDeleteBlocked = true;
     assert(
       err.message.includes("Cannot delete topic because it is referenced by"),
-      "Deleting topic with dependent resources is blocked with dependency explanation"
+      "Deleting topic with dependent resources is blocked with dependency explanation",
     );
   }
   assert(topicDeleteBlocked, "Topic deletion block enforced");
@@ -216,33 +269,62 @@ async function runAllVerifications() {
     assetDeleteBlocked = true;
     assert(
       err.message.includes("Cannot delete asset because it is currently used"),
-      "Deleting in-use asset is blocked with dependency details"
+      "Deleting in-use asset is blocked with dependency details",
     );
   }
   assert(assetDeleteBlocked, "Asset deletion block enforced");
 
   // 8. Physical Downloads & Assets Verification
   console.log("\n--- 8. Verifying Physical Downloads ---");
-  const pdfDisk = path.join(process.cwd(), "public", "uploads", "practical-java-handbook.pdf");
-  const zipDisk = path.join(process.cwd(), "public", "uploads", "study-session-tracker.zip");
-  assert(fs.existsSync(pdfDisk), "Physical Java handbook PDF exists in uploads storage");
-  assert(fs.existsSync(zipDisk), "Physical Study Session Tracker ZIP source archive exists in uploads storage");
+  const pdfDisk = path.join(
+    process.cwd(),
+    "public",
+    "uploads",
+    "practical-java-handbook.pdf",
+  );
+  const zipDisk = path.join(
+    process.cwd(),
+    "public",
+    "uploads",
+    "study-session-tracker.zip",
+  );
+  assert(
+    fs.existsSync(pdfDisk),
+    "Physical Java handbook PDF exists in uploads storage",
+  );
+  assert(
+    fs.existsSync(zipDisk),
+    "Physical Study Session Tracker ZIP source archive exists in uploads storage",
+  );
 
   const pdfBytes = fs.readFileSync(pdfDisk);
-  assert(pdfBytes.toString("ascii", 0, 5) === "%PDF-", "PDF file has valid PDF format signature");
+  assert(
+    pdfBytes.toString("ascii", 0, 5) === "%PDF-",
+    "PDF file has valid PDF format signature",
+  );
 
   const zipBytes = fs.readFileSync(zipDisk);
-  assert(zipBytes[0] === 0x50 && zipBytes[1] === 0x4b, "ZIP file has valid PK archive signature");
+  assert(
+    zipBytes[0] === 0x50 && zipBytes[1] === 0x4b,
+    "ZIP file has valid PK archive signature",
+  );
 
   // 9. Seed Idempotency Check
   console.log("\n--- 9. Verifying Seed Script Idempotency ---");
-  const topicsBeforeRerun = (await query("SELECT COUNT(*) as c FROM topics")).rows[0].c;
+  const topicsBeforeRerun = (await query("SELECT COUNT(*) as c FROM topics"))
+    .rows[0].c;
   await seedDatabase();
-  const topicsAfterRerun = (await query("SELECT COUNT(*) as c FROM topics")).rows[0].c;
-  assert(topicsBeforeRerun === topicsAfterRerun, "Rerunning seed script does NOT duplicate or overwrite data");
+  const topicsAfterRerun = (await query("SELECT COUNT(*) as c FROM topics"))
+    .rows[0].c;
+  assert(
+    topicsBeforeRerun === topicsAfterRerun,
+    "Rerunning seed script does NOT duplicate or overwrite data",
+  );
 
   console.log("\n=======================================================");
-  console.log(`🎉 ALL ${passedCount}/${totalCount} PLATFORM VERIFICATIONS PASSED!`);
+  console.log(
+    `🎉 ALL ${passedCount}/${totalCount} PLATFORM VERIFICATIONS PASSED!`,
+  );
   console.log("=======================================================\n");
 }
 

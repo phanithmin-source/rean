@@ -1,6 +1,7 @@
 import { getDb } from "./index";
 import path from "path";
 import fs from "fs";
+import { migrateDirectoryContent } from "./directory-migration";
 
 export async function runMigrations() {
   console.log("Running Rean PostgreSQL migrations...");
@@ -29,5 +30,6 @@ export async function runMigrations() {
     [initialVersion]
   );
 
+  await migrateDirectoryContent(db);
   console.log("Migrations applied successfully!");
 }

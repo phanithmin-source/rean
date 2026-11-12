@@ -1,5 +1,6 @@
 import { getDb } from "./index";
 import bcrypt from "bcryptjs";
+import { DIRECTORY_COPY } from "../directory-content";
 import { ensurePhysicalSeedAssets } from "../services/assets-generator";
 
 export async function seedDatabase() {
@@ -218,7 +219,7 @@ This guide provides the architectural blueprint for the Study Session Tracker ba
       tags: JSON.stringify(["rest-api", "http", "json", "backend", "architecture"]),
       source_url: "https://restfulapi.net/",
       curation_note:
-        "Essential reading before beginning the Backend Foundations learning path. Based on production API guidelines.",
+        "A practical introduction to API design, based on production API guidelines.",
       download_asset_id: null,
       featured_order: 3,
       has_chapters: false,
@@ -734,7 +735,7 @@ To build and verify the application locally or in CI:
 ./mvnw clean package -DskipTests=false
 \`\`\`
 
-Congratulations on completing the **Practical Java for Modern Developers** guide! Explore the **Backend Foundations** learning path next to apply these patterns to the final practice project.`,
+Congratulations on completing the **Practical Java for Modern Developers** guide! Explore the resource directory for more practical guides and projects.`,
       },
     ];
 
@@ -766,201 +767,12 @@ Congratulations on completing the **Practical Java for Modern Developers** guide
     }
   }
 
-  // 6. Learning Paths
-  const pathsToSeed = [
-    {
-      id: "path-programming-foundations",
-      slug: "programming-foundations",
-      title: "Programming Foundations",
-      summary:
-        "A disciplined start to coding. Learn computational thinking, variables, data structures, control flow, and object-oriented principles.",
-      outcome:
-        "Write clean, modular code, reason about algorithms and complexity, and build standalone command-line applications.",
-      prerequisites: JSON.stringify([
-        "Basic computer literacy and file management",
-        "Curiosity and logical reasoning",
-      ]),
-      final_task_title: "CLI Task Organizer & Habit Tracker",
-      final_task_description:
-        "Build a modular command-line tool that lets developers add, prioritize, filter, and track daily programming tasks. Persist tasks to JSON or local files, implement input validation, and write unit tests for your core business logic.",
-      topic_id: "topic-programming",
-      featured_order: 1,
-      steps: [
-        {
-          order: 1,
-          title: "Introduction to Computational Thinking & Variables",
-          description:
-            "Understand data types, operators, memory allocation, and how code executes line-by-line.",
-          resource_slug: "java-programming",
-          external_url: null,
-          minutes: 45,
-        },
-        {
-          order: 2,
-          title: "Control Flow, Branching & Loops",
-          description:
-            "Master if/else conditionals, switch expressions, and loop iterations with clean control flow.",
-          resource_slug: "java-programming",
-          external_url: null,
-          minutes: 60,
-        },
-        {
-          order: 3,
-          title: "Object-Oriented Design & Data Collections",
-          description:
-            "Design classes, records, and interfaces. Organize data using Lists, Sets, and Maps.",
-          resource_slug: "java-programming",
-          external_url: null,
-          minutes: 90,
-        },
-        {
-          order: 4,
-          title: "Version Control Foundations with Git",
-          description:
-            "Initialize repositories, stage commits with clear messages, and create feature branches.",
-          resource_slug: "git-fundamentals-to-branching",
-          external_url: null,
-          minutes: 45,
-        },
-      ],
-    },
-    {
-      id: "path-backend-foundations",
-      slug: "backend-foundations",
-      title: "Backend Foundations",
-      summary:
-        "Transition from standalone scripts to production web services. Learn HTTP, client-server models, relational databases, and REST APIs.",
-      outcome:
-        "Design schema-backed relational databases, build and secure HTTP REST APIs, and handle errors gracefully.",
-      prerequisites: JSON.stringify([
-        "Programming Foundations or equivalent experience in Java or TypeScript",
-        "Basic command-line terminal navigation",
-      ]),
-      final_task_title: "Study Session Tracker REST API",
-      final_task_description:
-        "Design and implement an authenticated REST API for developers to record study sessions, track progress across software topics, and calculate weekly coding metrics. Include relational schema migrations, input validation, and automated API tests.",
-      topic_id: "topic-backend",
-      featured_order: 2,
-      steps: [
-        {
-          order: 1,
-          title: "HTTP Protocol, Verbs & Client-Server Architecture",
-          description:
-            "Understand HTTP request/response headers, status codes, query strings, and payload serialization.",
-          resource_slug: "restful-api-design-guide",
-          external_url: null,
-          minutes: 60,
-        },
-        {
-          order: 2,
-          title: "Relational Modeling & SQL Queries with PostgreSQL",
-          description:
-            "Model entities with primary/foreign keys, write multi-table JOINs, and enforce data constraints.",
-          resource_slug: "practical-sql-relational-databases",
-          external_url: null,
-          minutes: 90,
-        },
-        {
-          order: 3,
-          title: "RESTful Service Design & Controller Endpoints",
-          description:
-            "Implement CRUD endpoints, validate request bodies, and structure clean service and repository layers.",
-          resource_slug: "java-programming",
-          external_url: null,
-          minutes: 120,
-        },
-        {
-          order: 4,
-          title: "Production Error Handling, Logging & Security",
-          description:
-            "Enforce authentication, handle unexpected errors with RFC 7807 problem details, and write integration tests.",
-          resource_slug: "restful-api-design-guide",
-          external_url: null,
-          minutes: 75,
-        },
-      ],
-    },
-  ];
-
-  for (const pathItem of pathsToSeed) {
-    const existing = await db.query(
-      "SELECT id FROM learning_paths WHERE slug = $1",
-      [pathItem.slug]
-    );
-
-    if (existing.rows.length === 0) {
-      await db.query(
-        `INSERT INTO learning_paths (
-          id, slug, title, summary, outcome, prerequisites,
-          final_task_title, final_task_description, topic_id, featured_order,
-          status, draft_title, draft_summary, draft_outcome, draft_prerequisites,
-          draft_final_task_title, draft_final_task_description, draft_topic_id,
-          draft_featured_order, has_draft_changes
-        ) VALUES (
-          $1, $2, $3, $4, $5, $6,
-          $7, $8, $9, $10,
-          'published', $3, $4, $5, $6,
-          $7, $8, $9,
-          $10, FALSE
-        )`,
-        [
-          pathItem.id,
-          pathItem.slug,
-          pathItem.title,
-          pathItem.summary,
-          pathItem.outcome,
-          pathItem.prerequisites,
-          pathItem.final_task_title,
-          pathItem.final_task_description,
-          pathItem.topic_id,
-          pathItem.featured_order,
-        ]
-      );
-
-      // Insert steps
-      for (const step of pathItem.steps) {
-        let resId = null;
-        if (step.resource_slug) {
-          const r = await db.query(
-            "SELECT id FROM resources WHERE slug = $1",
-            [step.resource_slug]
-          );
-          if (r.rows.length > 0) resId = r.rows[0].id;
-        }
-
-        await db.query(
-          `INSERT INTO learning_path_steps (
-            id, path_id, step_order, title, description, resource_id, external_url, estimated_minutes
-          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-          [
-            `step-${pathItem.slug}-${step.order}`,
-            pathItem.id,
-            step.order,
-            step.title,
-            step.description,
-            resId,
-            step.external_url,
-            step.minutes,
-          ]
-        );
-      }
-    }
-  }
-
   // 7. Pages (Explore homepage and About page)
   const existingExplore = await db.query(
     "SELECT key FROM pages WHERE key = 'explore'"
   );
   if (existingExplore.rows.length === 0) {
-    const exploreData = {
-      heroTitle: "Build Real Software with Rean (រៀន)",
-      heroSubtitle:
-        "A calm, distraction-free discovery hub for Cambodian students and software engineers. Curated books, guides, guided learning paths, and hands-on practice projects.",
-      featuredTopicsHeading: "Core Learning Domains",
-      curatedPicksHeading: "Curated Launch Resources",
-      catalogHeading: "Software Development Catalog",
-      pathsHeading: "Structured Learning Paths",
-    };
+    const exploreData = DIRECTORY_COPY.explore;
     await db.query(
       `INSERT INTO pages (key, title, published_content, draft_content, status, has_draft_changes)
        VALUES ('explore', 'Explore Rean', $1, $1, 'published', FALSE)`,
@@ -972,19 +784,7 @@ Congratulations on completing the **Practical Java for Modern Developers** guide
     "SELECT key FROM pages WHERE key = 'about'"
   );
   if (existingAbout.rows.length === 0) {
-    const aboutData = {
-      pageTitle: "About Rean (រៀន)",
-      mission:
-        "Rean (រៀន — Khmer for 'Learn') was founded to provide accessible, structured, and practical software engineering education. Our mission is to bridge the gap between academic theory and the daily realities of production software engineering.",
-      audience:
-        "Rean is designed specifically for high school and university students, self-taught developers, and early-career software engineers who seek clear, disciplined learning pathways rather than fragmented tutorials.",
-      learningApproach:
-        "We believe in project-driven mastery. Every concept is explained with direct code examples, and every learning path culminates in a real practice project. We prioritize fundamentals over fleeting hype.",
-      selectionCriteria:
-        "Every book, guide, and tool included in the Rean catalog is vetted against rigorous criteria: clarity of explanation, adherence to modern industry standards, zero marketing fluff, and open accessibility.",
-      ctaExploreLabel: "Explore Resource Catalog",
-      ctaPathsLabel: "View Learning Paths",
-    };
+    const aboutData = { pageTitle: "About Rean (???)", ...DIRECTORY_COPY.about };
     await db.query(
       `INSERT INTO pages (key, title, published_content, draft_content, status, has_draft_changes)
        VALUES ('about', 'About Rean (រៀន)', $1, $1, 'published', FALSE)`,
@@ -997,7 +797,7 @@ Congratulations on completing the **Practical Java for Modern Developers** guide
   if (parseInt(navCount.rows[0].count, 10) === 0) {
     const navItems = [
       { id: "nav-1", label: "Explore", url: "/", order: 1, position: "header" },
-      { id: "nav-2", label: "Learning Paths", url: "/paths", order: 2, position: "both" },
+      { id: "nav-2", label: "Categories", url: "/topics", order: 2, position: "both" },
       { id: "nav-3", label: "Programming", url: "/topics/programming", order: 3, position: "header" },
       { id: "nav-4", label: "About", url: "/about", order: 4, position: "both" },
       { id: "nav-5", label: "Explore Catalog", url: "/", order: 5, position: "footer" },
@@ -1025,13 +825,13 @@ Congratulations on completing the **Practical Java for Modern Developers** guide
       ) VALUES (
         'general',
         'Rean (រៀន)',
-        'Public software development learning and resource platform with guided paths and practical projects.',
+        'A curated directory of developer tools, books, practical guides, and programming resources.',
         '/images/logo.png',
         '/images/brand-book.png',
         '/images/logo.png',
         '© 2026 Rean (រៀន). Dedicated to software craftsmanship and student empowerment.',
-        '{"explore": "Rean (រៀន) — Software Development Learning & Resource Hub", "about": "About Rean (រៀន) — Our Mission & Approach", "paths": "Learning Paths — Structured Engineering Roadmaps"}'::jsonb,
-        '{"explore": "Discover curated programming resources, tutorials, and guided paths.", "about": "Learn about Rean mission, audience, and editorial standards.", "paths": "Follow structured roadmaps from programming foundations to backend services."}'::jsonb
+        '{"explore": "Rean (រៀន) — Developer Resource Directory", "about": "About Rean (រៀន) — Our Mission & Approach", "paths": "Learning Paths — Structured Engineering Roadmaps"}'::jsonb,
+        '{"explore": "Discover curated developer tools, books, guides, and practical resources.", "about": "Learn about Rean mission, audience, and editorial standards."}'::jsonb
       )`
     );
   }

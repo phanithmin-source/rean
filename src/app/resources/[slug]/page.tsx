@@ -89,7 +89,7 @@ export default async function ResourceDetailsPage({
 
       <main className="flex-1">
         {/* Resource Header */}
-        <div className="border-b border-border/70 bg-gradient-to-b from-[#F2EFE6]/50 via-[#F8F7F2] to-[#F8F7F2] py-10 md:py-14">
+        <div className="border-b border-border/70 page-banner py-10 md:py-14">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Breadcrumb */}
             <div className="flex items-center gap-2 text-xs font-medium text-navy/60 mb-6">
@@ -164,7 +164,7 @@ export default async function ResourceDetailsPage({
                   {firstChapter && (
                     <Link
                       href={`/resources/${resource.slug}/${firstChapter.slug}${isPreview ? "?preview=true" : ""}`}
-                      className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-navy text-white text-sm font-semibold hover:bg-navy-700 shadow-xs hover:shadow-sm hover:-translate-y-0.5 transition-all"
+                      className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-sage-700 shadow-xs hover:shadow-sm hover:-translate-y-0.5 transition-all"
                     >
                       <BookOpen className="w-4 h-4" />
                       <span>Read Online ({chapters.length} Chapters)</span>
@@ -317,15 +317,15 @@ export default async function ResourceDetailsPage({
                   Discover More
                 </h4>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Looking for more material? Browse our curated learning paths or search the catalog.
+                  Looking for more? Browse related categories or search the resource directory.
                 </p>
                 <div className="pt-2 flex flex-col gap-2">
                   <Link
-                    href="/paths"
+                    href="/topics"
                     className="text-xs font-semibold text-navy hover:underline flex items-center gap-1.5"
                   >
                     <Compass className="w-3.5 h-3.5 text-sage-600" />
-                    <span>View All Learning Paths</span>
+                    <span>Browse All Categories</span>
                   </Link>
                   <Link
                     href="/#catalog"

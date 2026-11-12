@@ -32,9 +32,9 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Rean (រៀន) — Software Development Learning & Resource Hub",
+  title: "Rean (រៀន) — Developer Resource Directory",
   description:
-    "Curated software development resources, guided learning paths, and practical hands-on projects for developers.",
+    "Discover curated developer tools, programming books, practical guides, and hands-on projects.",
   icons: {
     icon: "/images/brand-book.png",
     shortcut: "/images/brand-book.png",

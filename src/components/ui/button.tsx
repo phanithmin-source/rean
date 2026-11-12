@@ -8,12 +8,12 @@ export function cn(...inputs: any[]) {
 }
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 select-none",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 select-none",
   {
     variants: {
       variant: {
         default:
-          "bg-navy text-white hover:bg-navy-700 shadow-sm active:bg-navy-800",
+          "bg-primary text-white hover:bg-sage-700 shadow-sm active:bg-sage-800",
         destructive:
           "bg-destructive text-white hover:bg-destructive/90 shadow-sm",
         outline:
@@ -30,10 +30,10 @@ const buttonVariants = cva(
           "bg-cyan-200 text-navy-900 hover:bg-cyan-300 font-semibold shadow-sm",
       },
       size: {
-        default: "h-9 px-4 py-2",
-        sm: "h-8 rounded-md px-3 text-xs",
-        lg: "h-11 rounded-md px-6 text-base font-semibold",
-        icon: "h-9 w-9",
+        default: "h-11 px-4 py-2",
+        sm: "h-9 rounded-lg px-3 text-xs",
+        lg: "h-12 rounded-xl px-6 text-base font-semibold",
+        icon: "h-11 w-11",
       },
     },
     defaultVariants: {

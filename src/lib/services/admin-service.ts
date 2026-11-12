@@ -469,22 +469,7 @@ export async function publishResourceAdmin(id: string) {
 }
 
 export async function unpublishResourceAdmin(id: string) {
-  // Check if any published learning paths depend on this resource
-  const deps = await query(
-    `SELECT lp.title, lp.slug 
-     FROM learning_path_steps lps
-     JOIN learning_paths lp ON lps.path_id = lp.id
-     WHERE lps.resource_id = $1 AND lp.status = 'published'`,
-    [id]
-  );
-
-  if (deps.rows.length > 0) {
-    const pathsList = deps.rows.map((p) => `"${p.title}"`).join(", ");
-    throw new Error(
-      `Cannot unpublish this resource because it is required by published learning path(s): ${pathsList}. Unpublish or update those paths first.`
-    );
-  }
-
+  // Learning paths are retired; resources can be managed independently.
   await query(
     "UPDATE resources SET status = 'draft', updated_at = CURRENT_TIMESTAMP WHERE id = $1",
     [id]
@@ -496,21 +481,7 @@ export async function unpublishResourceAdmin(id: string) {
 }
 
 export async function deleteResourceAdmin(id: string) {
-  // Check dependencies
-  const pathDeps = await query(
-    `SELECT lp.title, lp.status FROM learning_path_steps lps
-     JOIN learning_paths lp ON lps.path_id = lp.id
-     WHERE lps.resource_id = $1`,
-    [id]
-  );
-
-  if (pathDeps.rows.length > 0) {
-    const names = pathDeps.rows.map((p) => `"${p.title}" (${p.status})`).join(", ");
-    throw new Error(
-      `Cannot delete resource because it is referenced in learning path steps: ${names}. Remove the reference from learning paths first.`
-    );
-  }
-
+  // Archived path references use ON DELETE SET NULL.
   const row = (await query("SELECT slug FROM resources WHERE id = $1", [id])).rows[0];
   await query("DELETE FROM resources WHERE id = $1", [id]);
 

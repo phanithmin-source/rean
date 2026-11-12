@@ -62,7 +62,7 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* Metrics Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Resources Stat */}
         <div className="p-6 rounded-2xl border border-border/80 bg-card shadow-xs space-y-2">
           <div className="flex items-center justify-between">
@@ -100,26 +100,6 @@ export default async function AdminDashboardPage() {
           <div className="text-xs text-muted-foreground pt-1 border-t border-border/60 flex items-center justify-between">
             <span>Draft chapters:</span>
             <span className="font-bold text-amber-700 tnum">{stats.counts.draftChapters}</span>
-          </div>
-        </div>
-
-        {/* Learning Paths Stat */}
-        <div className="p-6 rounded-2xl border border-border/80 bg-card shadow-xs space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-              Learning Paths
-            </span>
-            <Compass className="w-4 h-4 text-navy/60" />
-          </div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-extrabold text-navy tnum">
-              {stats.counts.publishedPaths}
-            </span>
-            <span className="text-xs text-emerald-700 font-semibold">Live Paths</span>
-          </div>
-          <div className="text-xs text-muted-foreground pt-1 border-t border-border/60 flex items-center justify-between">
-            <span>Draft roadmaps:</span>
-            <span className="font-bold text-amber-700 tnum">{stats.counts.draftPaths}</span>
           </div>
         </div>
 
@@ -175,8 +155,8 @@ export default async function AdminDashboardPage() {
           </div>
 
           <div className="divide-y divide-border">
-            {stats.recentEdits.length > 0 ? (
-              stats.recentEdits.map((item) => (
+            {stats.recentEdits.filter(item => item.type === "resource").length > 0 ? (
+              stats.recentEdits.filter(item => item.type === "resource").map((item) => (
                 <div
                   key={item.id}
                   className="py-3 flex items-center justify-between gap-4"
@@ -214,7 +194,7 @@ export default async function AdminDashboardPage() {
                       href={
                         item.type === "resource"
                           ? `/admin/resources/${item.id}`
-                          : `/admin/paths/${item.id}`
+                          : "/admin/resources"
                       }
                       className="text-xs font-bold text-navy hover:underline ml-1"
                     >
@@ -271,16 +251,6 @@ export default async function AdminDashboardPage() {
               <ArrowRight className="w-3.5 h-3.5 text-navy/40 group-hover:text-navy group-hover:translate-x-0.5 transition-all" />
             </Link>
 
-            <Link
-              href="/admin/paths"
-              className="flex items-center justify-between p-3 rounded-xl border border-border hover:bg-cream-100 transition-colors group"
-            >
-              <div className="flex items-center gap-2.5">
-                <Compass className="w-4 h-4 text-navy/70 group-hover:text-navy" />
-                <span className="text-xs font-semibold text-navy">Learning Path Roadmaps</span>
-              </div>
-              <ArrowRight className="w-3.5 h-3.5 text-navy/40 group-hover:text-navy group-hover:translate-x-0.5 transition-all" />
-            </Link>
 
             <Link
               href="/admin/explore"

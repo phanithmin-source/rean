@@ -181,7 +181,7 @@ export default function AdminAssetsPage() {
             <input
               type="file"
               onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-              className="text-xs text-navy file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-navy file:text-white hover:file:bg-navy-700 cursor-pointer pt-1"
+              className="text-xs text-navy file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-primary file:text-white hover:file:bg-navy-700 cursor-pointer pt-1"
             />
           </div>
         </div>
@@ -330,7 +330,7 @@ export default function AdminAssetsPage() {
 
       {/* Dependency Inspector Modal */}
       {inspectingAsset && (
-        <div className="fixed inset-0 z-50 bg-navy/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-primary/60 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-card rounded-2xl border border-border shadow-xl max-w-md w-full p-6 space-y-4 animate-in zoom-in-95">
             <div className="flex items-center justify-between border-b border-border pb-3">
               <h2 className="text-lg font-bold text-navy flex items-center gap-2">

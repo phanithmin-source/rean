@@ -40,7 +40,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
     notFound();
   }
 
-  const { topic, resources, learningPaths } = topicData;
+  const { topic, resources } = topicData;
 
   const getTopicIcon = (iconName: string) => {
     switch (iconName) {
@@ -65,7 +65,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
 
       <main className="flex-1">
         {/* Topic Header Banner */}
-        <section className="border-b border-border/70 bg-gradient-to-b from-[#F2EFE6]/50 via-[#F8F7F2] to-[#F8F7F2] py-12 md:py-16">
+        <section className="border-b border-border/70 page-banner py-12 md:py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-2 text-xs font-semibold text-navy/70 mb-4">
               <Link href="/" className="hover:underline">
@@ -93,52 +93,6 @@ export default async function TopicPage({ params }: TopicPageProps) {
           </div>
         </section>
 
-        {/* Learning Paths in this Topic (if any) */}
-        {learningPaths.length > 0 && (
-          <section className="py-10 border-b border-border bg-card/60">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex items-center gap-2 mb-4">
-                <Compass className="w-4 h-4 text-sage-600" />
-                <h2 className="text-xl font-bold text-navy">
-                  Structured Learning Paths in {topic.name}
-                </h2>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {learningPaths.map((lp) => (
-                  <div
-                    key={lp.id}
-                    className="p-6 rounded-xl border border-border bg-cream-50 flex flex-col justify-between"
-                  >
-                    <div>
-                      <h3 className="text-lg font-bold text-navy">
-                        <Link href={`/paths/${lp.slug}`} className="hover:underline">
-                          {lp.title}
-                        </Link>
-                      </h3>
-                      <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
-                        {lp.summary}
-                      </p>
-                    </div>
-
-                    <div className="mt-4 pt-3 border-t border-border flex items-center justify-between">
-                      <span className="text-xs font-semibold text-sage-700">
-                        Goal: {lp.final_task_title}
-                      </span>
-                      <Link
-                        href={`/paths/${lp.slug}`}
-                        className="inline-flex items-center gap-1 text-xs font-bold text-navy hover:underline"
-                      >
-                        <span>Follow Roadmap</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </Link>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
 
         {/* Resources in this Topic */}
         <section className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -180,7 +134,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
               </p>
               <Link
                 href="/#catalog"
-                className="inline-block mt-2 text-xs font-semibold px-3 py-1.5 rounded-md bg-navy text-white"
+                className="inline-block mt-2 text-xs font-semibold px-3 py-1.5 rounded-md bg-primary text-white"
               >
                 Browse All Resources
               </Link>

@@ -111,7 +111,7 @@ export function ExploreFilters({ topics, totalResults }: ExploreFiltersProps) {
   ];
 
   return (
-    <div id="catalog" className="space-y-6 pt-2">
+    <div className="space-y-5 rounded-2xl border border-border bg-white p-4 shadow-xs sm:p-6" aria-busy={isPending}>
       {/* Prominent Search Bar (DevPages / ReanCode101 reference) */}
       <form onSubmit={handleSearchSubmit} className="relative w-full">
         <div className="relative flex items-center">
@@ -120,8 +120,8 @@ export function ExploreFilters({ topics, totalResults }: ExploreFiltersProps) {
             type="search"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Search software catalog (e.g. 'REST API', 'Java', 'SQL', 'Git', 'Docker')..."
-            className="w-full h-14 pl-12 pr-28 rounded-2xl border border-border/80 bg-card text-navy text-base placeholder:text-muted-foreground/75 focus:outline-none focus:border-sage-500 focus:ring-4 focus:ring-sage-100/60 shadow-xs transition-all"
+            placeholder="Search tools, books, guides..."
+            className="w-full h-14 pl-12 pr-36 rounded-2xl border border-border/80 bg-card text-navy text-base placeholder:text-muted-foreground/75 focus:outline-none focus:border-sage-500 focus:ring-4 focus:ring-sage-100/60 shadow-xs transition-all"
             aria-label="Search software catalog"
           />
           <div className="absolute right-2.5 flex items-center gap-1.5">
@@ -142,7 +142,7 @@ export function ExploreFilters({ topics, totalResults }: ExploreFiltersProps) {
               type="submit"
               size="sm"
               variant="default"
-              className="h-9 px-4 font-semibold rounded-xl bg-navy hover:bg-navy-700 shadow-xs"
+              className="h-9 px-4 font-semibold rounded-xl bg-primary hover:bg-sage-700 shadow-xs"
             >
               Search
             </Button>
@@ -169,10 +169,11 @@ export function ExploreFilters({ topics, totalResults }: ExploreFiltersProps) {
 
         <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
           <button
+            aria-pressed={currentTopic === "all"}
             onClick={() => updateFilters({ topic: "all" })}
-            className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all border ${
+            className={`px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border ${
               currentTopic === "all"
-                ? "bg-navy text-white border-navy shadow-xs"
+                ? "bg-sage-50 text-sage-700 border-sage-200 shadow-xs"
                 : "bg-card text-navy/80 border-border/80 hover:bg-cream-100 hover:text-navy"
             }`}
           >
@@ -181,10 +182,11 @@ export function ExploreFilters({ topics, totalResults }: ExploreFiltersProps) {
           {topics.map((t) => (
             <button
               key={t.slug}
+              aria-pressed={currentTopic === t.slug}
               onClick={() => updateFilters({ topic: t.slug })}
-              className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all border ${
+              className={`px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border ${
                 currentTopic === t.slug
-                  ? "bg-navy text-white border-navy shadow-xs"
+                  ? "bg-sage-50 text-sage-700 border-sage-200 shadow-xs"
                   : "bg-card text-navy/80 border-border/80 hover:bg-cream-100 hover:text-navy"
               }`}
             >
@@ -238,7 +240,7 @@ export function ExploreFilters({ topics, totalResults }: ExploreFiltersProps) {
         </div>
 
         {/* Result Count */}
-        <div className="text-xs font-medium text-navy/70 flex items-center gap-2">
+        <div role="status" aria-live="polite" className="text-xs font-medium text-navy/70 flex items-center gap-2">
           {isPending ? (
             <span className="text-navy/50 animate-pulse">Updating...</span>
           ) : (

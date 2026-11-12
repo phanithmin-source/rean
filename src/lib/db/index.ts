@@ -1,5 +1,6 @@
 import path from "path";
 import fs from "fs";
+import { migrateDirectoryContent } from "./directory-migration";
 
 export interface QueryResult<T = any> {
   rows: T[];
@@ -151,4 +152,5 @@ async function runMigrationsInternal(db: DbClient) {
       console.warn("Migration notice:", statement.slice(0, 40), err.message);
     }
   }
+  await migrateDirectoryContent(db);
 }

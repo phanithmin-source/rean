@@ -27,7 +27,6 @@ export default function AdminExplorePage() {
     featuredTopicsHeading: "",
     curatedPicksHeading: "",
     catalogHeading: "",
-    pathsHeading: "",
   });
 
   const fetchPage = async () => {
@@ -47,7 +46,6 @@ export default function AdminExplorePage() {
         featuredTopicsHeading: content.featuredTopicsHeading || "",
         curatedPicksHeading: content.curatedPicksHeading || "",
         catalogHeading: content.catalogHeading || "",
-        pathsHeading: content.pathsHeading || "",
       });
     } catch (e: any) {
       setError(e.message);
@@ -263,15 +261,6 @@ export default function AdminExplorePage() {
             />
           </div>
 
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold uppercase tracking-wider text-navy">
-              Learning Paths Section Heading
-            </label>
-            <Input
-              value={formData.pathsHeading}
-              onChange={(e) => setFormData({ ...formData, pathsHeading: e.target.value })}
-            />
-          </div>
         </div>
       </div>
     </div>

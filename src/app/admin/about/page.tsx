@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { DEFAULT_PROFILE } from "@/lib/directory-content";
 import {
   FileText,
   CheckCircle2,
@@ -25,13 +26,13 @@ export default function AdminAboutPage() {
   const [success, setSuccess] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
+    ...DEFAULT_PROFILE,
     pageTitle: "",
     mission: "",
     audience: "",
     learningApproach: "",
     selectionCriteria: "",
     ctaExploreLabel: "",
-    ctaPathsLabel: "",
   });
 
   const fetchPage = async () => {
@@ -46,13 +47,18 @@ export default function AdminAboutPage() {
 
       const content = p.draft_content || p.published_content || {};
       setFormData({
+        ...(Object.fromEntries(
+          Object.entries(DEFAULT_PROFILE).map(([key, fallback]) => [
+            key,
+            content[key] ?? fallback,
+          ]),
+        ) as typeof DEFAULT_PROFILE),
         pageTitle: content.pageTitle || "",
         mission: content.mission || "",
         audience: content.audience || "",
         learningApproach: content.learningApproach || "",
         selectionCriteria: content.selectionCriteria || "",
         ctaExploreLabel: content.ctaExploreLabel || "",
-        ctaPathsLabel: content.ctaPathsLabel || "",
       });
     } catch (e: any) {
       setError(e.message);
@@ -81,7 +87,9 @@ export default function AdminAboutPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to save draft");
-      setSuccess("About draft copy saved! The live About page remains completely unchanged until published.");
+      setSuccess(
+        "About draft copy saved! The live About page remains completely unchanged until published.",
+      );
       await fetchPage();
     } catch (e: any) {
       setError(e.message);
@@ -106,7 +114,9 @@ export default function AdminAboutPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to publish");
-      setSuccess("About page published! Live visitors now see the updated editorial copy.");
+      setSuccess(
+        "About page published! Live visitors now see the updated editorial copy.",
+      );
       await fetchPage();
     } catch (e: any) {
       setError(e.message);
@@ -116,7 +126,12 @@ export default function AdminAboutPage() {
   };
 
   const handleDiscard = async () => {
-    if (!confirm("Discard all pending draft edits and reset to currently published copy?")) return;
+    if (
+      !confirm(
+        "Discard all pending draft edits and reset to currently published copy?",
+      )
+    )
+      return;
     setError(null);
     setSaving(true);
     try {
@@ -140,7 +155,11 @@ export default function AdminAboutPage() {
   };
 
   if (loading) {
-    return <div className="p-10 text-center font-bold text-navy">Loading About page copy...</div>;
+    return (
+      <div className="p-10 text-center font-bold text-navy">
+        Loading About page copy...
+      </div>
+    );
   }
 
   return (
@@ -153,7 +172,8 @@ export default function AdminAboutPage() {
             <span>About Page Editorial</span>
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Manage Rean&apos;s mission, audience, learning approach, and resource selection criteria.
+            Manage your profile, Rean&apos;s mission, and resource selection
+            criteria.
           </p>
         </div>
 
@@ -218,7 +238,10 @@ export default function AdminAboutPage() {
 
       {pageData?.has_draft_changes && (
         <div className="p-3 rounded-lg bg-amber-50 border border-amber-200 text-xs font-semibold text-amber-900 flex items-center gap-2">
-          <span>⚠️ You have unpublished draft edits. The live About page remains completely untouched for public visitors until you click Publish.</span>
+          <span>
+            ⚠️ You have unpublished draft edits. The live About page remains
+            completely untouched for public visitors until you click Publish.
+          </span>
         </div>
       )}
 
@@ -230,9 +253,71 @@ export default function AdminAboutPage() {
           </label>
           <Input
             value={formData.pageTitle}
-            onChange={(e) => setFormData({ ...formData, pageTitle: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, pageTitle: e.target.value })
+            }
             required
           />
+        </div>
+
+        <div className="space-y-5 rounded-2xl border border-sage-200 bg-sage-50/50 p-5 sm:p-6">
+          <div>
+            <h2 className="font-semibold text-navy">Your profile</h2>
+            <p className="mt-1 text-xs leading-5 text-muted-foreground">
+              Your introduction and contact links appear on the About page.
+            </p>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {(
+              [
+                ["profileName", "Name"],
+                ["profileRole", "Role"],
+                ["profilePhoto", "Photo path (inside public)"],
+                ["profileEmail", "Email"],
+                ["profileGithub", "GitHub URL"],
+                ["profileTelegram", "Telegram URL"],
+                ["profileLinkedIn", "LinkedIn URL"],
+              ] as const
+            ).map(([key, label]) => (
+              <div key={key} className="space-y-1.5">
+                <label htmlFor={key} className="text-xs font-medium text-navy">
+                  {label}
+                </label>
+                <Input
+                  id={key}
+                  type={
+                    key === "profileEmail"
+                      ? "email"
+                      : key === "profileGithub" ||
+                          key === "profileTelegram" ||
+                          key === "profileLinkedIn"
+                        ? "url"
+                        : "text"
+                  }
+                  value={formData[key]}
+                  onChange={(e) =>
+                    setFormData({ ...formData, [key]: e.target.value })
+                  }
+                />
+              </div>
+            ))}
+          </div>
+          <div className="space-y-1.5">
+            <label
+              htmlFor="profileBio"
+              className="text-xs font-medium text-navy"
+            >
+              Short introduction
+            </label>
+            <Textarea
+              id="profileBio"
+              rows={4}
+              value={formData.profileBio}
+              onChange={(e) =>
+                setFormData({ ...formData, profileBio: e.target.value })
+              }
+            />
+          </div>
         </div>
 
         {/* Mission */}
@@ -243,7 +328,9 @@ export default function AdminAboutPage() {
           </label>
           <Textarea
             value={formData.mission}
-            onChange={(e) => setFormData({ ...formData, mission: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, mission: e.target.value })
+            }
             rows={3}
             required
           />
@@ -257,7 +344,9 @@ export default function AdminAboutPage() {
           </label>
           <Textarea
             value={formData.audience}
-            onChange={(e) => setFormData({ ...formData, audience: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, audience: e.target.value })
+            }
             rows={3}
             required
           />
@@ -271,7 +360,9 @@ export default function AdminAboutPage() {
           </label>
           <Textarea
             value={formData.learningApproach}
-            onChange={(e) => setFormData({ ...formData, learningApproach: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, learningApproach: e.target.value })
+            }
             rows={3}
             required
           />
@@ -285,7 +376,9 @@ export default function AdminAboutPage() {
           </label>
           <Textarea
             value={formData.selectionCriteria}
-            onChange={(e) => setFormData({ ...formData, selectionCriteria: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, selectionCriteria: e.target.value })
+            }
             rows={3}
             required
           />
@@ -299,17 +392,9 @@ export default function AdminAboutPage() {
             </label>
             <Input
               value={formData.ctaExploreLabel}
-              onChange={(e) => setFormData({ ...formData, ctaExploreLabel: e.target.value })}
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold uppercase tracking-wider text-navy">
-              Learning Paths CTA Button Label
-            </label>
-            <Input
-              value={formData.ctaPathsLabel}
-              onChange={(e) => setFormData({ ...formData, ctaPathsLabel: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, ctaExploreLabel: e.target.value })
+              }
             />
           </div>
         </div>

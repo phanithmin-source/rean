@@ -44,7 +44,7 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center px-4 py-12 bg-background selection:bg-cyan/40">
+    <div className="min-h-screen flex flex-col justify-center items-center px-4 py-12 home-hero selection:bg-sage-100">
       <div className="w-full max-w-md space-y-8">
         <div className="flex flex-col items-center text-center space-y-2">
           <ReanLogo size="lg" />
@@ -56,7 +56,7 @@ export default function AdminLoginPage() {
           </p>
         </div>
 
-        <div className="bg-card p-8 rounded-2xl border border-border/80 shadow-xs">
+        <div className="bg-card p-8 rounded-3xl border border-border shadow-soft">
           {error && (
             <div className="mb-6 p-3 rounded-xl bg-destructive/10 border border-destructive/20 flex items-center gap-2 text-destructive text-xs font-semibold">
               <AlertCircle className="w-4 h-4 shrink-0" />
@@ -66,12 +66,14 @@ export default function AdminLoginPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-navy">
-                Email Address
+              <label htmlFor="editor-email" className="text-xs font-semibold text-navy">
+                Email address
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-2.5 w-4 h-4 text-navy/40" />
+                <Mail className="absolute left-3 top-3.5 w-4 h-4 text-navy/40" />
                 <Input
+                  id="editor-email"
+                  autoComplete="username"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -83,12 +85,14 @@ export default function AdminLoginPage() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider text-navy">
+              <label htmlFor="editor-password" className="text-xs font-semibold text-navy">
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-2.5 w-4 h-4 text-navy/40" />
+                <Lock className="absolute left-3 top-3.5 w-4 h-4 text-navy/40" />
                 <Input
+                  id="editor-password"
+                  autoComplete="current-password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}

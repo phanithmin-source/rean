@@ -163,7 +163,7 @@ export default function AdminResourcesPage() {
           onClick={() => setFilterStatus("all")}
           className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors border ${
             filterStatus === "all"
-              ? "bg-navy text-white border-navy"
+              ? "bg-primary text-white border-navy"
               : "bg-card text-navy border-border hover:bg-cream-200"
           }`}
         >
@@ -173,7 +173,7 @@ export default function AdminResourcesPage() {
           onClick={() => setFilterStatus("published")}
           className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors border ${
             filterStatus === "published"
-              ? "bg-navy text-white border-navy"
+              ? "bg-primary text-white border-navy"
               : "bg-card text-navy border-border hover:bg-cream-200"
           }`}
         >
@@ -183,7 +183,7 @@ export default function AdminResourcesPage() {
           onClick={() => setFilterStatus("draft")}
           className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors border ${
             filterStatus === "draft"
-              ? "bg-navy text-white border-navy"
+              ? "bg-primary text-white border-navy"
               : "bg-card text-navy border-border hover:bg-cream-200"
           }`}
         >

@@ -15,7 +15,7 @@ export function ReanLogo({
   useImage = true,
 }: ReanLogoProps) {
   const sizeMap = {
-    sm: { icon: 32, text: "text-lg", sub: "text-[11px]", radius: "rounded-lg" },
+    sm: { icon: 32, text: "text-lg", sub: "text-[10px]", radius: "rounded-lg" },
     md: { icon: 42, text: "text-xl", sub: "text-xs", radius: "rounded-xl" },
     lg: { icon: 54, text: "text-2xl", sub: "text-sm", radius: "rounded-2xl" },
     xl: { icon: 76, text: "text-4xl", sub: "text-base", radius: "rounded-2xl" },
@@ -53,9 +53,9 @@ export function ReanLogo({
             </span>
           </div>
           <span
-            className={`text-muted-foreground/90 font-medium tracking-tight mt-1 leading-none ${current.sub}`}
+            className={`text-muted-foreground font-medium tracking-tight mt-1 leading-none ${current.sub}`}
           >
-            Software Learning & Resource Hub
+            The developer resource directory
           </span>
         </div>
       )}

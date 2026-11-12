@@ -1,5 +1,7 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { DEFAULT_PROFILE } from "@/lib/directory-content";
 import { redirect } from "next/navigation";
 import {
   getPageCopy,
@@ -20,6 +22,11 @@ import {
   BookOpen,
   Eye,
   CheckCircle2,
+  Send,
+  Briefcase,
+  Code2,
+  Mail,
+  ArrowUpRight,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -48,6 +55,33 @@ export default async function AboutPage({ searchParams }: AboutPageProps) {
     getPageCopy("about", { preview: isPreview }),
   ]);
 
+  const profile = {
+    ...DEFAULT_PROFILE,
+    ...Object.fromEntries(
+      Object.entries(aboutData || {}).filter(
+        ([key, value]) =>
+          key.startsWith("profile") &&
+          typeof value === "string" &&
+          value.trim(),
+      ),
+    ),
+  };
+  const socialUrl = (value: string) => {
+    try {
+      const url = new URL(value);
+      return url.protocol === "https:" || url.protocol === "http:"
+        ? url.href
+        : undefined;
+    } catch {
+      return undefined;
+    }
+  };
+  const photo =
+    profile.profilePhoto.startsWith("/") &&
+    !profile.profilePhoto.startsWith("//")
+      ? profile.profilePhoto
+      : DEFAULT_PROFILE.profilePhoto;
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <PublicHeader navItems={navItems.header} />
@@ -56,7 +90,8 @@ export default async function AboutPage({ searchParams }: AboutPageProps) {
         <div className="bg-amber-100 border-b border-amber-300 py-2 px-4 text-center text-xs font-bold text-amber-900 flex items-center justify-center gap-2">
           <Eye className="w-4 h-4 text-amber-700" />
           <span>
-            Editor Preview Mode: Viewing unpublished draft revision of the About page.
+            Editor Preview Mode: Viewing unpublished draft revision of the About
+            page.
           </span>
           <Link
             href="/admin/about"
@@ -69,12 +104,12 @@ export default async function AboutPage({ searchParams }: AboutPageProps) {
 
       <main className="flex-1">
         {/* Hero Banner */}
-        <section className="border-b border-border/70 bg-gradient-to-b from-[#F2EFE6]/50 via-[#F8F7F2] to-[#F8F7F2] py-16 md:py-24">
+        <section className="border-b border-border/70 page-banner py-16 md:py-24">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-card border border-border/80 text-xs font-semibold text-navy mx-auto shadow-xs">
               <span className="font-khmer text-sage-700">អំពី រៀន</span>
               <span className="text-border">•</span>
-              <span>Our Purpose & Pedagogy</span>
+              <span>The story behind the directory</span>
             </div>
 
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-navy tracking-tight leading-tight">
@@ -82,9 +117,77 @@ export default async function AboutPage({ searchParams }: AboutPageProps) {
             </h1>
 
             <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Empowering students and aspiring software developers through structured pathways,
-              rigorous open curricula, and hands-on project craftsmanship.
+              Helping curious developers discover resources worth their time,
+              thoughtfully selected tools, clear guides, and practical projects.
             </p>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-6xl px-5 pt-14 sm:px-8 lg:pt-20">
+          <div className="grid overflow-hidden rounded-[2rem] border border-border bg-white shadow-soft md:grid-cols-[0.8fr_1.2fr]">
+            <div className="relative min-h-[360px] bg-[#ECF3EE] sm:min-h-[440px]">
+              <Image
+                src={photo}
+                alt={profile.profileName}
+                fill
+                priority
+                sizes="(max-width: 767px) 100vw, 440px"
+                className="object-cover object-[50%_30%]"
+              />
+              <div className="absolute bottom-5 left-5 rounded-full border border-white/60 bg-white/90 px-4 py-2 text-xs font-medium text-navy backdrop-blur-md">
+                The person behind Rean
+              </div>
+            </div>
+            <div className="flex flex-col justify-center p-7 sm:p-10 lg:p-12">
+              <p className="eyebrow">Hello, nice to meet you</p>
+              <h2 className="text-4xl font-semibold tracking-tight text-navy sm:text-5xl">
+                {profile.profileName}
+              </h2>
+              <p className="mt-3 text-base font-medium text-sage-600">
+                {profile.profileRole}
+              </p>
+              <p className="mt-6 text-sm leading-7 text-muted-foreground sm:text-base">
+                {profile.profileBio}
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                {socialUrl(profile.profileGithub) && (
+                  <a
+                    href={socialUrl(profile.profileGithub)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="secondary-link !px-4 !py-2 !text-xs"
+                  >
+                    <Code2 size={15} /> GitHub <ArrowUpRight size={12} />
+                  </a>
+                )}
+                {socialUrl(profile.profileTelegram) && (
+                  <a
+                    href={socialUrl(profile.profileTelegram)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="secondary-link !px-4 !py-2 !text-xs"
+                  >
+                    <Send size={15} /> Telegram <ArrowUpRight size={12} />
+                  </a>
+                )}
+                {socialUrl(profile.profileLinkedIn) && (
+                  <a
+                    href={socialUrl(profile.profileLinkedIn)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="secondary-link !px-4 !py-2 !text-xs"
+                  >
+                    <Briefcase size={15} /> LinkedIn <ArrowUpRight size={12} />
+                  </a>
+                )}
+              </div>
+              <a
+                href={`mailto:${encodeURIComponent(profile.profileEmail)}`}
+                className="mt-5 inline-flex w-fit items-center gap-2 break-all text-sm text-muted-foreground hover:text-primary"
+              >
+                <Mail size={15} className="shrink-0" /> {profile.profileEmail}
+              </a>
+            </div>
           </div>
         </section>
 
@@ -114,7 +217,7 @@ export default async function AboutPage({ searchParams }: AboutPageProps) {
             </div>
             <p className="text-base sm:text-lg text-navy/80 leading-relaxed">
               {aboutData?.audience ||
-                "Rean is designed specifically for high school and university students, self-taught developers, and early-career software engineers who seek clear, disciplined learning pathways rather than fragmented tutorials."}
+                "Rean is for students, self-taught developers, and working engineers looking for useful resources without the noise."}
             </p>
           </div>
 
@@ -124,11 +227,13 @@ export default async function AboutPage({ searchParams }: AboutPageProps) {
               <div className="p-2.5 rounded-xl bg-cream-200 text-navy">
                 <Lightbulb className="w-6 h-6 text-navy-600" />
               </div>
-              <h2 className="text-2xl font-bold text-navy">Learning Approach</h2>
+              <h2 className="text-2xl font-bold text-navy">
+                Learning Approach
+              </h2>
             </div>
             <p className="text-base sm:text-lg text-navy/80 leading-relaxed">
               {aboutData?.learningApproach ||
-                "We believe in project-driven mastery. Every concept is explained with direct code examples, and every learning path culminates in a real practice project. We prioritize fundamentals over fleeting hype."}
+                "Discover, evaluate, and put it into practice. We curate resources with clear explanations, useful examples, and an emphasis on fundamentals."}
             </p>
           </div>
 
@@ -149,27 +254,30 @@ export default async function AboutPage({ searchParams }: AboutPageProps) {
           </div>
 
           {/* Action CTAs */}
-          <div className="rounded-2xl border-2 border-sage-300 bg-[#ECE8DC]/60 p-8 sm:p-12 text-center space-y-6">
+          <div className="rounded-2xl border border-sage-200 bg-sage-50 p-8 sm:p-12 text-center space-y-6">
             <h3 className="text-2xl sm:text-3xl font-extrabold text-navy">
               Ready to Advance Your Software Journey?
             </h3>
             <p className="text-sm sm:text-base text-muted-foreground max-w-lg mx-auto leading-relaxed">
-              Begin by exploring our full catalog of topics or choose a guided learning path to build your first portfolio project.
+              Find a useful tool, explore a new topic, or pick up a practical
+              guide. Your next resource is waiting.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
               <Link
                 href="/#catalog"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-navy text-white font-semibold text-sm hover:bg-navy-700 shadow-sm transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-white font-semibold text-sm hover:bg-sage-700 shadow-sm transition-all"
               >
                 <BookOpen className="w-4 h-4" />
-                <span>{aboutData?.ctaExploreLabel || "Explore Resource Catalog"}</span>
+                <span>
+                  {aboutData?.ctaExploreLabel || "Explore Resource Catalog"}
+                </span>
               </Link>
               <Link
-                href="/paths"
+                href="/topics"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-sage-200 text-navy-900 font-semibold text-sm hover:bg-sage-300 border border-sage-300 shadow-sm transition-all"
               >
                 <Compass className="w-4 h-4 text-navy" />
-                <span>{aboutData?.ctaPathsLabel || "View Learning Paths"}</span>
+                <span>Browse categories</span>
               </Link>
             </div>
           </div>

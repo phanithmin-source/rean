@@ -137,10 +137,11 @@ export async function getNavigationItems(): Promise<{
     "SELECT id, label, url, display_order, position FROM navigation_items WHERE is_published = TRUE ORDER BY display_order ASC"
   );
 
-  const header = res.rows.filter(
+  const items = res.rows.map((item: NavigationItem) => item.url === "/paths" ? { ...item, label: "Categories", url: "/topics" } : item).filter((item: NavigationItem) => !item.url.startsWith("/paths/"));
+  const header = items.filter(
     (item: NavigationItem) => item.position === "header" || item.position === "both"
   );
-  const footer = res.rows.filter(
+  const footer = items.filter(
     (item: NavigationItem) => item.position === "footer" || item.position === "both"
   );
 
@@ -217,30 +218,7 @@ export async function getTopicBySlug(slug: string): Promise<{
     has_chapters: parseInt(r.chapter_count, 10) > 0,
   }));
 
-  const pathsRes = await query(
-    `SELECT id, slug, title, summary, outcome, prerequisites, final_task_title, final_task_description, topic_id, featured_order, status
-     FROM learning_paths
-     WHERE topic_id = $1 AND status = 'published'
-     ORDER BY featured_order ASC NULLS LAST`,
-    [topic.id]
-  );
-
-  const learningPaths: LearningPathItem[] = pathsRes.rows.map((p) => ({
-    id: p.id,
-    slug: p.slug,
-    title: p.title,
-    summary: p.summary,
-    outcome: p.outcome,
-    prerequisites: Array.isArray(p.prerequisites) ? p.prerequisites : typeof p.prerequisites === "string" ? JSON.parse(p.prerequisites) : [],
-    final_task_title: p.final_task_title,
-    final_task_description: p.final_task_description,
-    topic_id: p.topic_id,
-    topic_name: topic.name,
-    featured_order: p.featured_order,
-    status: p.status,
-  }));
-
-  return { topic, resources, learningPaths };
+  return { topic, resources, learningPaths: [] };
 }
 
 export async function searchResources(options: {

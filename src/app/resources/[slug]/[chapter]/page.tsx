@@ -74,7 +74,7 @@ export default async function ChapterReaderPage({
       )}
 
       {/* Chapter Reader Sub-Header */}
-      <div className="sticky top-16 z-30 border-b border-border/70 bg-[#F8F7F2]/90 backdrop-blur-md py-3 px-4 sm:px-8">
+      <div className="sticky top-[72px] z-30 border-b border-border/70 bg-white/95 backdrop-blur-md py-3 px-4 sm:px-8">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           <div className="flex items-center gap-2 text-xs truncate">
             <Link
@@ -123,7 +123,7 @@ export default async function ChapterReaderPage({
                       href={`/resources/${resource.slug}/${ch.slug}${isPreview ? "?preview=true" : ""}`}
                       className={`flex items-start gap-2.5 p-2 rounded-xl text-xs transition-all ${
                         isCurrent
-                          ? "bg-navy text-white font-semibold shadow-xs"
+                          ? "bg-primary text-white font-semibold shadow-xs"
                           : "text-navy/80 hover:bg-cream-100 hover:text-navy"
                       }`}
                     >
@@ -147,7 +147,7 @@ export default async function ChapterReaderPage({
           </aside>
 
           {/* Main Reading Surface */}
-          <article className="lg:col-span-3 order-1 lg:order-2 space-y-8">
+          <article className="lg:col-span-3 min-w-0 order-1 lg:order-2 space-y-8">
             <div className="bg-card rounded-2xl border border-border p-6 sm:p-10 lg:p-12 shadow-xs">
               {/* Chapter Title & Meta */}
               <header className="border-b border-border pb-6 mb-8">
@@ -190,7 +190,7 @@ export default async function ChapterReaderPage({
               {nextChapter ? (
                 <Link
                   href={`/resources/${resource.slug}/${nextChapter.slug}${isPreview ? "?preview=true" : ""}`}
-                  className="w-full sm:w-auto inline-flex items-center justify-between sm:justify-start gap-2 px-5 py-3 rounded-lg bg-navy hover:bg-navy-700 text-white text-xs font-semibold shadow-xs transition-all"
+                  className="w-full sm:w-auto inline-flex items-center justify-between sm:justify-start gap-2 px-5 py-3 rounded-lg bg-primary hover:bg-sage-700 text-white text-xs font-semibold shadow-xs transition-all"
                 >
                   <div className="text-right">
                     <span className="block text-[10px] text-white/70 uppercase">
